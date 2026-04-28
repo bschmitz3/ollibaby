@@ -1,65 +1,57 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-[#FFF8F1] text-[#2F261F]">
+      <section className="mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center justify-center px-6 py-16 text-center">
+        <div className="mb-6 rounded-full bg-white px-4 py-2 text-sm font-medium text-[#7A5C3E] shadow-sm">
+          MVP em construção
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+        <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+          Ollibaby
+        </h1>
+
+        <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5F5147] sm:text-xl">
+          Compare fraldas e lenços umedecidos pelo preço real por unidade, sem
+          se confundir com kits, pacotes, linhas e tamanhos.
+        </p>
+
+        <div className="mt-10 w-full max-w-2xl rounded-3xl bg-white p-3 shadow-lg shadow-[#E8D7C5]/60">
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <input
+              type="search"
+              placeholder="Busque por Pampers G, Huggies Supreme Care, lenço 384 unidades..."
+              className="min-h-12 flex-1 rounded-2xl border border-[#E8D7C5] bg-[#FFFDF9] px-4 text-base outline-none transition focus:border-[#C98F5A]"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <button className="min-h-12 rounded-2xl bg-[#2F261F] px-6 font-semibold text-white transition hover:bg-[#4A382B]">
+              Buscar
+            </button>
+          </div>
         </div>
-      </main>
-    </div>
+
+        <div className="mt-8 grid w-full max-w-2xl gap-3 sm:grid-cols-2">
+          <div className="rounded-2xl bg-white p-5 text-left shadow-sm">
+            <h2 className="font-semibold">Fraldas</h2>
+            <p className="mt-2 text-sm leading-6 text-[#6B5E54]">
+              Compare pacotes e kits por R$/fralda, considerando tamanho, linha
+              e quantidade.
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-white p-5 text-left shadow-sm">
+            <h2 className="font-semibold">Lenços umedecidos</h2>
+            <p className="mt-2 text-sm leading-6 text-[#6B5E54]">
+              Compare pacotes, refis e kits por R$/lenço, usando a quantidade
+              total correta.
+            </p>
+          </div>
+        </div>
+
+        <p className="mt-8 max-w-2xl text-sm leading-6 text-[#7A6B60]">
+          Alguns links poderão gerar comissão para o Ollibaby. Isso não altera o
+          preço para você e não deve influenciar a curadoria das melhores
+          ofertas.
+        </p>
+      </section>
+    </main>
   );
 }
