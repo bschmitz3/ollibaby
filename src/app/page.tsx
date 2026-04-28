@@ -1,4 +1,15 @@
+import { ProductCard } from "@/components/product-card";
+import { mockOffers } from "@/data/mock-offers";
+import { mockProducts } from "@/data/mock-products";
+import { getRankedOffersForProduct } from "@/lib/offers";
+
 export default function Home() {
+  const productsWithBestOffer = mockProducts.map((product) => {
+    const rankedOffers = getRankedOffersForProduct(mockOffers, product.id);
+    const bestOffer = rankedOffers[0];
+    return { product, bestOffer };
+  });
+
   return (
     <main className="min-h-screen bg-[#FFF8F1] text-[#2F261F]">
       <section className="mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center justify-center px-6 py-16 text-center">
@@ -51,6 +62,29 @@ export default function Home() {
           preço para você e não deve influenciar a curadoria das melhores
           ofertas.
         </p>
+      </section>
+
+      <section className="mx-auto w-full max-w-5xl px-6 pb-16">
+        <div className="rounded-3xl bg-white p-6 shadow-lg shadow-[#E8D7C5]/60 sm:p-10">
+          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            Produtos monitorados no MVP
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-[#6B5E54] sm:text-base">
+            Dados mockados para validar catálogo canônico, preço unitário e
+            ranking de ofertas antes de conectar banco, scraping e afiliados
+            reais.
+          </p>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {productsWithBestOffer.map(({ product, bestOffer }) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                bestOffer={bestOffer}
+              />
+            ))}
+          </div>
+        </div>
       </section>
     </main>
   );
