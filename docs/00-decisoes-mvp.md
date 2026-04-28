@@ -260,3 +260,12 @@ Critérios de 90 dias:
 | Ofertas não afiliadas podem aparecer | Confirmada |
 | Stack inicial com Next.js, Supabase e Prisma | Confirmada |
 | Desenvolvimento principal no Cursor | Confirmada |
+
+---
+
+## 14. Notas para retomada futura
+
+- A interface atual é provisória e serve apenas para validar o MVP funcionalmente. Não investir tempo excessivo em refinamento visual neste momento.
+- O layout definitivo será criado posteriormente no Figma.
+- Após a definição visual no Figma, o frontend será personalizado com base no novo design.
+- Até lá, priorizar estrutura de dados, catálogo canônico, preço unitário, busca, tracking, afiliados e qualidade de matching.
