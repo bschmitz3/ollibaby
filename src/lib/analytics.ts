@@ -1,6 +1,9 @@
 export type AnalyticsEventName =
   | "search_submitted"
   | "category_filter_clicked"
+  | "offer_availability_filter_clicked"
+  | "brand_filter_clicked"
+  | "size_filter_clicked"
   | "product_viewed"
   | "offer_clicked"
   | "offer_error_report_clicked";

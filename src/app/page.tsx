@@ -8,11 +8,21 @@ import { getRankedOffersForProduct } from "@/lib/offers";
 import Link from "next/link";
 
 type CategoryFilter = "all" | "diaper" | "wet_wipe";
+type OfferAvailabilityFilter = "all" | "with_offer" | "without_offer";
 
 const CATEGORY_FILTERS: Array<{ value: CategoryFilter; label: string }> = [
   { value: "all", label: "Todos" },
   { value: "diaper", label: "Fraldas" },
   { value: "wet_wipe", label: "Lenços" },
+];
+
+const OFFER_AVAILABILITY_FILTERS: Array<{
+  value: OfferAvailabilityFilter;
+  label: string;
+}> = [
+  { value: "all", label: "Todos" },
+  { value: "with_offer", label: "Com oferta" },
+  { value: "without_offer", label: "Sem oferta" },
 ];
 
 function getCategoryFilterClassName(isActive: boolean): string {
@@ -21,13 +31,39 @@ function getCategoryFilterClassName(isActive: boolean): string {
     : "rounded-full border border-[#E8D7C5] bg-white px-3 py-1 font-medium text-[#7A5C3E]";
 }
 
+function getSecondaryFilterClassName(isActive: boolean): string {
+  return isActive
+    ? "rounded-full bg-[#2F261F] px-3 py-1 text-xs font-semibold text-white"
+    : "rounded-full border border-[#E8D7C5] bg-white px-3 py-1 text-xs font-semibold text-[#6B5E54]";
+}
+
 function normalizeCategoryFilter(value: string | undefined): CategoryFilter {
   if (value === "diaper") return "diaper";
   if (value === "wet_wipe") return "wet_wipe";
   return "all";
 }
 
-function buildHomeHref(params: { q?: string; category?: CategoryFilter }): string {
+function normalizeOfferAvailabilityFilter(
+  value: string | undefined,
+): OfferAvailabilityFilter {
+  if (value === "with_offer") return "with_offer";
+  if (value === "without_offer") return "without_offer";
+  return "all";
+}
+
+function normalizeOptionalText(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}
+
+function buildHomeHref(params: {
+  q?: string;
+  category?: CategoryFilter;
+  offerAvailability?: OfferAvailabilityFilter;
+  brand?: string;
+  size?: string;
+}): string {
   const searchParams = new URLSearchParams();
 
   if (params.q && params.q.trim().length > 0) {
@@ -38,8 +74,46 @@ function buildHomeHref(params: { q?: string; category?: CategoryFilter }): strin
     searchParams.set("category", params.category);
   }
 
+  if (params.offerAvailability && params.offerAvailability !== "all") {
+    searchParams.set("offerAvailability", params.offerAvailability);
+  }
+
+  if (params.brand && params.brand.trim().length > 0) {
+    searchParams.set("brand", params.brand.trim());
+  }
+
+  if (params.size && params.size.trim().length > 0) {
+    searchParams.set("size", params.size.trim());
+  }
+
   const qs = searchParams.toString();
   return qs.length > 0 ? `/?${qs}` : "/";
+}
+
+function getUniqueBrands(products: Array<{ brand: string }>): string[] {
+  const set = new Set<string>();
+  for (const p of products) {
+    if (p.brand.trim().length > 0) set.add(p.brand.trim());
+  }
+  return Array.from(set).sort((a, b) => a.localeCompare(b, "pt-BR"));
+}
+
+function getUniqueSizes(products: Array<{ size?: string }>): string[] {
+  const set = new Set<string>();
+  for (const p of products) {
+    if (p.size && p.size.trim().length > 0) set.add(p.size.trim());
+  }
+
+  const preferredOrder = ["RN", "P", "M", "G", "XG", "XXG", "XXXG"];
+
+  return Array.from(set).sort((a, b) => {
+    const aIdx = preferredOrder.indexOf(a);
+    const bIdx = preferredOrder.indexOf(b);
+    const aRank = aIdx === -1 ? Number.POSITIVE_INFINITY : aIdx;
+    const bRank = bIdx === -1 ? Number.POSITIVE_INFINITY : bIdx;
+    if (aRank !== bRank) return aRank - bRank;
+    return a.localeCompare(b, "pt-BR");
+  });
 }
 
 type HomeProps = {
@@ -58,13 +132,42 @@ export default async function Home({ searchParams }: HomeProps) {
     : categoryRaw ?? undefined;
   const category = normalizeCategoryFilter(categoryValue);
 
+  const offerAvailabilityRaw = resolvedSearchParams?.offerAvailability;
+  const offerAvailabilityValue = Array.isArray(offerAvailabilityRaw)
+    ? offerAvailabilityRaw[0]
+    : offerAvailabilityRaw ?? undefined;
+  const offerAvailability = normalizeOfferAvailabilityFilter(offerAvailabilityValue);
+
+  const brandRaw = resolvedSearchParams?.brand;
+  const brandValue = Array.isArray(brandRaw) ? brandRaw[0] : brandRaw ?? undefined;
+  const brand = normalizeOptionalText(brandValue);
+
+  const sizeRaw = resolvedSearchParams?.size;
+  const sizeValue = Array.isArray(sizeRaw) ? sizeRaw[0] : sizeRaw ?? undefined;
+  const size = normalizeOptionalText(sizeValue);
+
   const searchedProducts = searchCanonicalProducts(q);
-  const products =
+  const categoryFiltered =
     category === "all"
       ? searchedProducts
       : searchedProducts.filter((p) => p.category === category);
 
-  const productsWithBestOffer = products.map((product) => {
+  const brandFiltered = brand
+    ? categoryFiltered.filter((p) => p.brand === brand)
+    : categoryFiltered;
+
+  const sizeFiltered = size
+    ? brandFiltered.filter((p) => (p.size ? String(p.size) : "") === size)
+    : brandFiltered;
+
+  const availableBrands = getUniqueBrands(categoryFiltered);
+  const availableSizes = getUniqueSizes(
+    categoryFiltered.map((p) => ({
+      size: p.size ? String(p.size) : undefined,
+    })),
+  );
+
+  const productsWithBestOffer = sizeFiltered.map((product) => {
     const rankedOffers = getRankedOffersForProduct(mockOffers, product.id);
     const bestOffer = rankedOffers[0];
     return {
@@ -73,6 +176,19 @@ export default async function Home({ searchParams }: HomeProps) {
       rankedOffersCount: rankedOffers.length,
     };
   });
+
+  const offerAvailabilityFiltered =
+    offerAvailability === "with_offer"
+      ? productsWithBestOffer.filter((p) => p.rankedOffersCount > 0)
+      : offerAvailability === "without_offer"
+        ? productsWithBestOffer.filter((p) => p.rankedOffersCount === 0)
+        : productsWithBestOffer;
+
+  const hasAnyNonSearchFilterActive =
+    category !== "all" ||
+    offerAvailability !== "all" ||
+    brand !== undefined ||
+    size !== undefined;
 
   return (
     <main className="min-h-screen bg-[#FFF8F1] text-[#2F261F]">
@@ -139,18 +255,164 @@ export default async function Home({ searchParams }: HomeProps) {
                 href={buildHomeHref({
                   q: hasSearch ? q : undefined,
                   category: filter.value,
+                  offerAvailability,
+                  brand,
+                  size,
                 })}
                 className={getCategoryFilterClassName(category === filter.value)}
                 eventName="category_filter_clicked"
                 eventPayload={{
-                  category: filter.value,
                   q,
                   hasSearch,
+                  category,
+                  brand,
+                  size,
+                  offerAvailability,
+                  clickedCategory: filter.value,
                 }}
               >
                 {filter.label}
               </TrackedLink>
             ))}
+          </div>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-semibold uppercase tracking-wide text-[#6B5E54]">
+                Ofertas
+              </span>
+              {OFFER_AVAILABILITY_FILTERS.map((filter) => (
+                <TrackedLink
+                  key={filter.value}
+                  href={buildHomeHref({
+                    q: hasSearch ? q : undefined,
+                    category,
+                    offerAvailability: filter.value,
+                    brand,
+                    size,
+                  })}
+                  className={getSecondaryFilterClassName(
+                    offerAvailability === filter.value,
+                  )}
+                  eventName="offer_availability_filter_clicked"
+                  eventPayload={{
+                    q,
+                    hasSearch,
+                    category,
+                    brand,
+                    size,
+                    offerAvailability,
+                    clickedOfferAvailability: filter.value,
+                  }}
+                >
+                  {filter.label}
+                </TrackedLink>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-semibold uppercase tracking-wide text-[#6B5E54]">
+                Marca
+              </span>
+              <TrackedLink
+                href={buildHomeHref({
+                  q: hasSearch ? q : undefined,
+                  category,
+                  offerAvailability,
+                  size,
+                })}
+                className={getSecondaryFilterClassName(brand === undefined)}
+                eventName="brand_filter_clicked"
+                eventPayload={{
+                  q,
+                  hasSearch,
+                  category,
+                  brand,
+                  size,
+                  offerAvailability,
+                  clickedBrand: "all",
+                }}
+              >
+                Todas
+              </TrackedLink>
+              {availableBrands.map((b) => (
+                <TrackedLink
+                  key={b}
+                  href={buildHomeHref({
+                    q: hasSearch ? q : undefined,
+                    category,
+                    offerAvailability,
+                    brand: b,
+                    size,
+                  })}
+                  className={getSecondaryFilterClassName(brand === b)}
+                  eventName="brand_filter_clicked"
+                  eventPayload={{
+                    q,
+                    hasSearch,
+                    category,
+                    brand,
+                    size,
+                    offerAvailability,
+                    clickedBrand: b,
+                  }}
+                >
+                  {b}
+                </TrackedLink>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-semibold uppercase tracking-wide text-[#6B5E54]">
+                Tamanho
+              </span>
+              <TrackedLink
+                href={buildHomeHref({
+                  q: hasSearch ? q : undefined,
+                  category,
+                  offerAvailability,
+                  brand,
+                })}
+                className={getSecondaryFilterClassName(size === undefined)}
+                eventName="size_filter_clicked"
+                eventPayload={{
+                  q,
+                  hasSearch,
+                  category,
+                  brand,
+                  size,
+                  offerAvailability,
+                  clickedSize: "all",
+                }}
+              >
+                Todos
+              </TrackedLink>
+              {availableSizes.map((s) => (
+                <TrackedLink
+                  key={s}
+                  href={buildHomeHref({
+                    q: hasSearch ? q : undefined,
+                    category,
+                    offerAvailability,
+                    brand,
+                    size: s,
+                  })}
+                  className={getSecondaryFilterClassName(size === s)}
+                  eventName="size_filter_clicked"
+                  eventPayload={{
+                    q,
+                    hasSearch,
+                    category,
+                    brand,
+                    size,
+                    offerAvailability,
+                    clickedSize: s,
+                  }}
+                >
+                  {s}
+                </TrackedLink>
+              ))}
+            </div>
           </div>
 
           <div className="mt-4 flex flex-col gap-2 text-sm text-[#6B5E54] sm:flex-row sm:items-center sm:justify-between">
@@ -162,25 +424,41 @@ export default async function Home({ searchParams }: HomeProps) {
                 </p>
               ) : null}
               <p>
-                {productsWithBestOffer.length}{" "}
-                {productsWithBestOffer.length === 1 ? "produto" : "produtos"}{" "}
-                encontrado{productsWithBestOffer.length === 1 ? "" : "s"}
+                {offerAvailabilityFiltered.length}{" "}
+                {offerAvailabilityFiltered.length === 1 ? "produto" : "produtos"}{" "}
+                encontrado{offerAvailabilityFiltered.length === 1 ? "" : "s"}
               </p>
             </div>
 
-            {hasSearch ? (
-              <Link
-                href={buildHomeHref({
-                  category,
-                })}
-                className="text-[#7A5C3E] underline"
-              >
-                Limpar busca
-              </Link>
-            ) : null}
+            <div className="flex flex-wrap gap-3">
+              {hasSearch ? (
+                <Link
+                  href={buildHomeHref({
+                    category,
+                    offerAvailability,
+                    brand,
+                    size,
+                  })}
+                  className="text-[#7A5C3E] underline"
+                >
+                  Limpar busca
+                </Link>
+              ) : null}
+
+              {hasAnyNonSearchFilterActive ? (
+                <Link
+                  href={buildHomeHref({
+                    q: hasSearch ? q : undefined,
+                  })}
+                  className="text-[#7A5C3E] underline"
+                >
+                  Limpar filtros
+                </Link>
+              ) : null}
+            </div>
           </div>
 
-          {productsWithBestOffer.length === 0 ? (
+          {offerAvailabilityFiltered.length === 0 ? (
             <div className="mt-8 rounded-2xl border border-[#E8D7C5] bg-[#FFFDF9] p-6 text-left">
               <h3 className="text-base font-semibold text-[#2F261F]">
                 Nenhum produto encontrado
@@ -194,7 +472,7 @@ export default async function Home({ searchParams }: HomeProps) {
             </div>
           ) : (
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {productsWithBestOffer.map(
+              {offerAvailabilityFiltered.map(
                 ({ product, bestOffer, rankedOffersCount }) => (
                   <ProductCard
                     key={product.id}
