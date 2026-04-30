@@ -1,3 +1,4 @@
+import { ComparisonExplainer } from "@/components/comparison-explainer";
 import { ProductCard } from "@/components/product-card";
 import { mockOffers } from "@/data/mock-offers";
 import { searchCanonicalProducts } from "@/lib/catalog/search";
@@ -129,6 +130,8 @@ export default async function Home({ searchParams }: HomeProps) {
           ofertas.
         </p>
       </section>
+
+      <ComparisonExplainer />
 
       <section className="mx-auto w-full max-w-5xl px-6 pb-16">
         <div className="rounded-3xl bg-white p-6 shadow-lg shadow-[#E8D7C5]/60 sm:p-10">
