@@ -4,6 +4,41 @@ import { searchCanonicalProducts } from "@/lib/catalog/search";
 import { getRankedOffersForProduct } from "@/lib/offers";
 import Link from "next/link";
 
+type CategoryFilter = "all" | "diaper" | "wet_wipe";
+
+const CATEGORY_FILTERS: Array<{ value: CategoryFilter; label: string }> = [
+  { value: "all", label: "Todos" },
+  { value: "diaper", label: "Fraldas" },
+  { value: "wet_wipe", label: "Lenços" },
+];
+
+function getCategoryFilterClassName(isActive: boolean): string {
+  return isActive
+    ? "rounded-full bg-[#2F261F] px-3 py-1 font-medium text-white"
+    : "rounded-full border border-[#E8D7C5] bg-white px-3 py-1 font-medium text-[#7A5C3E]";
+}
+
+function normalizeCategoryFilter(value: string | undefined): CategoryFilter {
+  if (value === "diaper") return "diaper";
+  if (value === "wet_wipe") return "wet_wipe";
+  return "all";
+}
+
+function buildHomeHref(params: { q?: string; category?: CategoryFilter }): string {
+  const searchParams = new URLSearchParams();
+
+  if (params.q && params.q.trim().length > 0) {
+    searchParams.set("q", params.q.trim());
+  }
+
+  if (params.category && params.category !== "all") {
+    searchParams.set("category", params.category);
+  }
+
+  const qs = searchParams.toString();
+  return qs.length > 0 ? `/?${qs}` : "/";
+}
+
 type HomeProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
@@ -14,7 +49,17 @@ export default async function Home({ searchParams }: HomeProps) {
   const q = (Array.isArray(qRaw) ? qRaw[0] : qRaw ?? "").trim();
   const hasSearch = q.length > 0;
 
-  const products = searchCanonicalProducts(q);
+  const categoryRaw = resolvedSearchParams?.category;
+  const categoryValue = Array.isArray(categoryRaw)
+    ? categoryRaw[0]
+    : categoryRaw ?? undefined;
+  const category = normalizeCategoryFilter(categoryValue);
+
+  const searchedProducts = searchCanonicalProducts(q);
+  const products =
+    category === "all"
+      ? searchedProducts
+      : searchedProducts.filter((p) => p.category === category);
 
   const productsWithBestOffer = products.map((product) => {
     const rankedOffers = getRankedOffersForProduct(mockOffers, product.id);
@@ -92,7 +137,22 @@ export default async function Home({ searchParams }: HomeProps) {
             reais.
           </p>
 
-          <div className="mt-6 flex flex-col gap-2 text-sm text-[#6B5E54] sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-6 flex flex-wrap gap-2 text-sm">
+            {CATEGORY_FILTERS.map((filter) => (
+              <Link
+                key={filter.value}
+                href={buildHomeHref({
+                  q: hasSearch ? q : undefined,
+                  category: filter.value,
+                })}
+                className={getCategoryFilterClassName(category === filter.value)}
+              >
+                {filter.label}
+              </Link>
+            ))}
+          </div>
+
+          <div className="mt-4 flex flex-col gap-2 text-sm text-[#6B5E54] sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
               {hasSearch ? (
                 <p>
@@ -108,7 +168,12 @@ export default async function Home({ searchParams }: HomeProps) {
             </div>
 
             {hasSearch ? (
-              <Link href="/" className="text-[#7A5C3E] underline">
+              <Link
+                href={buildHomeHref({
+                  category,
+                })}
+                className="text-[#7A5C3E] underline"
+              >
                 Limpar busca
               </Link>
             ) : null}
