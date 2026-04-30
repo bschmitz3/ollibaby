@@ -2,10 +2,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { OfferCard } from "@/components/offer-card";
+import { PriceHistorySummary } from "@/components/price-history-summary";
 import { ProductViewTracker } from "@/components/product-view-tracker";
 import { mockOffers } from "@/data/mock-offers";
 import { getCanonicalProducts } from "@/lib/catalog/search";
-import { getRankedOffersForProduct } from "@/lib/offers";
+import { getEffectiveUnitPriceInCents, getRankedOffersForProduct } from "@/lib/offers";
 
 type ProductPageProps = {
   params: Promise<{
@@ -51,6 +52,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   const rankedOffers = getRankedOffersForProduct(mockOffers, product.id);
+  const bestOffer = rankedOffers[0];
+  const currentUnitPriceInCents = bestOffer
+    ? getEffectiveUnitPriceInCents(bestOffer)
+    : undefined;
 
   const hasLine = product.line.trim().length > 0;
   const sizeLabel = product.size ? String(product.size) : undefined;
@@ -115,6 +120,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
             ranking por preço unitário antes de conectar scraping, banco e
             afiliados reais.
           </p>
+
+          <PriceHistorySummary
+            productId={product.id}
+            currentUnitPriceInCents={currentUnitPriceInCents}
+            unitType={product.unitType}
+          />
 
           <div className="mt-8">
             <h2 className="text-lg font-semibold tracking-tight sm:text-xl">

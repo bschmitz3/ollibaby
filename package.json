@@ -9,6 +9,7 @@
     "lint": "eslint",
     "debug:ranking": "tsx src/data/debug-ranking.ts",
     "validate:mock-offers": "tsx src/data/validate-mock-offers.ts",
+    "validate:mock-price-history": "tsx src/data/validate-mock-price-history.ts",
     "catalog:mock": "tsx scripts/catalog/src/run.ts mock",
     "catalog:export-review": "tsx scripts/catalog/src/run.ts export_review",
     "catalog:import-review": "tsx scripts/catalog/src/run.ts import_review",
