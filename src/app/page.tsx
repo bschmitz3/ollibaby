@@ -2,6 +2,7 @@ import { ProductCard } from "@/components/product-card";
 import { mockOffers } from "@/data/mock-offers";
 import { searchCanonicalProducts } from "@/lib/catalog/search";
 import { getRankedOffersForProduct } from "@/lib/offers";
+import Link from "next/link";
 
 type HomeProps = {
   searchParams?: Record<string, string | string[] | undefined>;
@@ -9,9 +10,10 @@ type HomeProps = {
 
 export default function Home({ searchParams }: HomeProps) {
   const qRaw = searchParams?.q;
-  const q = Array.isArray(qRaw) ? qRaw[0] : qRaw;
+  const q = (Array.isArray(qRaw) ? qRaw[0] : qRaw ?? "").trim();
+  const hasSearch = q.length > 0;
 
-  const products = q ? searchCanonicalProducts(q) : searchCanonicalProducts("");
+  const products = searchCanonicalProducts(q);
 
   const productsWithBestOffer = products.map((product) => {
     const rankedOffers = getRankedOffersForProduct(mockOffers, product.id);
@@ -40,7 +42,7 @@ export default function Home({ searchParams }: HomeProps) {
             <input
               type="search"
               name="q"
-              defaultValue={q ?? ""}
+              defaultValue={q}
               placeholder="Busque por Pampers G, Huggies Supreme Care, lenço 384 unidades..."
               className="min-h-12 flex-1 rounded-2xl border border-[#E8D7C5] bg-[#FFFDF9] px-4 text-base outline-none transition focus:border-[#C98F5A]"
             />
@@ -89,15 +91,51 @@ export default function Home({ searchParams }: HomeProps) {
             reais.
           </p>
 
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {productsWithBestOffer.map(({ product, bestOffer }) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                bestOffer={bestOffer}
-              />
-            ))}
+          <div className="mt-6 flex flex-col gap-2 text-sm text-[#6B5E54] sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
+              {hasSearch ? (
+                <p>
+                  Busca por:{" "}
+                  <span className="font-medium">{`"${q}"`}</span>
+                </p>
+              ) : null}
+              <p>
+                {productsWithBestOffer.length}{" "}
+                {productsWithBestOffer.length === 1 ? "produto" : "produtos"}{" "}
+                encontrado{productsWithBestOffer.length === 1 ? "" : "s"}
+              </p>
+            </div>
+
+            {hasSearch ? (
+              <Link href="/" className="text-[#7A5C3E] underline">
+                Limpar busca
+              </Link>
+            ) : null}
           </div>
+
+          {productsWithBestOffer.length === 0 ? (
+            <div className="mt-8 rounded-2xl border border-[#E8D7C5] bg-[#FFFDF9] p-6 text-left">
+              <h3 className="text-base font-semibold text-[#2F261F]">
+                Nenhum produto encontrado
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-[#6B5E54]">
+                Tente buscar por marca, linha, tamanho ou quantidade.
+              </p>
+              <Link href="/" className="mt-4 inline-block text-[#7A5C3E] underline">
+                Ver todos os produtos
+              </Link>
+            </div>
+          ) : (
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {productsWithBestOffer.map(({ product, bestOffer }) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  bestOffer={bestOffer}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </main>
