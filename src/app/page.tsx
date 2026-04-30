@@ -228,7 +228,13 @@ export default async function Home({ searchParams }: HomeProps) {
         </p>
 
         <div className="mt-10 w-full max-w-2xl rounded-3xl bg-white p-3 shadow-lg shadow-[#E8D7C5]/60">
-          <SearchForm defaultQuery={q} />
+          <SearchForm
+            defaultQuery={q}
+            category={category}
+            offerAvailability={offerAvailability}
+            brand={brand}
+            size={size}
+          />
         </div>
 
         <div className="mt-8 grid w-full max-w-2xl gap-3 sm:grid-cols-2">

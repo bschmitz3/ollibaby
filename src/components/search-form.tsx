@@ -4,9 +4,19 @@ import { trackEvent } from "@/lib/analytics";
 
 export type SearchFormProps = {
   defaultQuery: string;
+  category?: string;
+  offerAvailability?: string;
+  brand?: string;
+  size?: string;
 };
 
-export function SearchForm({ defaultQuery }: SearchFormProps) {
+export function SearchForm({
+  defaultQuery,
+  category,
+  offerAvailability,
+  brand,
+  size,
+}: SearchFormProps) {
   return (
     <form
       method="GET"
@@ -20,9 +30,26 @@ export function SearchForm({ defaultQuery }: SearchFormProps) {
         trackEvent("search_submitted", {
           q: trimmed,
           hasSearch: trimmed.length > 0,
+          category,
+          offerAvailability,
+          brand,
+          size,
         });
       }}
     >
+      {category && category !== "all" ? (
+        <input type="hidden" name="category" value={category} />
+      ) : null}
+      {offerAvailability && offerAvailability !== "all" ? (
+        <input
+          type="hidden"
+          name="offerAvailability"
+          value={offerAvailability}
+        />
+      ) : null}
+      {brand ? <input type="hidden" name="brand" value={brand} /> : null}
+      {size ? <input type="hidden" name="size" value={size} /> : null}
+
       <input
         type="search"
         name="q"
