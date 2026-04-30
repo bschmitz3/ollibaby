@@ -146,6 +146,9 @@ export default async function Home({ searchParams }: HomeProps) {
   const sizeValue = Array.isArray(sizeRaw) ? sizeRaw[0] : sizeRaw ?? undefined;
   const size = normalizeOptionalText(sizeValue);
 
+  const shouldShowSizeFilter = category !== "wet_wipe";
+  const effectiveSize = shouldShowSizeFilter ? size : undefined;
+
   const activeFilterLabels: string[] = [];
   if (hasSearch) {
     activeFilterLabels.push(`Busca: "${q}"`);
@@ -163,8 +166,8 @@ export default async function Home({ searchParams }: HomeProps) {
   if (brand) {
     activeFilterLabels.push(`Marca: ${brand}`);
   }
-  if (size) {
-    activeFilterLabels.push(`Tamanho: ${size}`);
+  if (effectiveSize) {
+    activeFilterLabels.push(`Tamanho: ${effectiveSize}`);
   }
 
   const searchedProducts = searchCanonicalProducts(q);
@@ -177,16 +180,18 @@ export default async function Home({ searchParams }: HomeProps) {
     ? categoryFiltered.filter((p) => p.brand === brand)
     : categoryFiltered;
 
-  const sizeFiltered = size
-    ? brandFiltered.filter((p) => (p.size ? String(p.size) : "") === size)
+  const sizeFiltered = effectiveSize
+    ? brandFiltered.filter((p) => (p.size ? String(p.size) : "") === effectiveSize)
     : brandFiltered;
 
   const availableBrands = getUniqueBrands(categoryFiltered);
-  const availableSizes = getUniqueSizes(
-    categoryFiltered.map((p) => ({
-      size: p.size ? String(p.size) : undefined,
-    })),
-  );
+  const availableSizes = shouldShowSizeFilter
+    ? getUniqueSizes(
+        categoryFiltered.map((p) => ({
+          size: p.size ? String(p.size) : undefined,
+        })),
+      )
+    : [];
 
   const productsWithBestOffer = sizeFiltered.map((product) => {
     const rankedOffers = getRankedOffersForProduct(mockOffers, product.id);
@@ -209,7 +214,9 @@ export default async function Home({ searchParams }: HomeProps) {
     category !== "all" ||
     offerAvailability !== "all" ||
     brand !== undefined ||
-    size !== undefined;
+    effectiveSize !== undefined;
+
+  const hasAnyFilterOrSearchActive = hasSearch || hasAnyNonSearchFilterActive;
 
   return (
     <main className="min-h-screen bg-[#FFF8F1] text-[#2F261F]">
@@ -233,7 +240,7 @@ export default async function Home({ searchParams }: HomeProps) {
             category={category}
             offerAvailability={offerAvailability}
             brand={brand}
-            size={size}
+            size={effectiveSize}
           />
         </div>
 
@@ -276,31 +283,36 @@ export default async function Home({ searchParams }: HomeProps) {
           </p>
 
           <div className="mt-6 flex flex-wrap gap-2 text-sm">
-            {CATEGORY_FILTERS.map((filter) => (
-              <TrackedLink
-                key={filter.value}
-                href={buildHomeHref({
-                  q: hasSearch ? q : undefined,
-                  category: filter.value,
-                  offerAvailability,
-                  brand,
-                  size,
-                })}
-                className={getCategoryFilterClassName(category === filter.value)}
-                eventName="category_filter_clicked"
-                eventPayload={{
-                  q,
-                  hasSearch,
-                  category,
-                  brand,
-                  size,
-                  offerAvailability,
-                  clickedCategory: filter.value,
-                }}
-              >
-                {filter.label}
-              </TrackedLink>
-            ))}
+            {CATEGORY_FILTERS.map((filter) => {
+              const nextCategory = filter.value;
+              const shouldKeepSizeForNextCategory = nextCategory !== "wet_wipe";
+
+              return (
+                <TrackedLink
+                  key={filter.value}
+                  href={buildHomeHref({
+                    q: hasSearch ? q : undefined,
+                    category: nextCategory,
+                    offerAvailability,
+                    brand,
+                    size: shouldKeepSizeForNextCategory ? effectiveSize : undefined,
+                  })}
+                  className={getCategoryFilterClassName(category === filter.value)}
+                  eventName="category_filter_clicked"
+                  eventPayload={{
+                    q,
+                    hasSearch,
+                    category,
+                    brand,
+                    size: effectiveSize,
+                    offerAvailability,
+                    clickedCategory: nextCategory,
+                  }}
+                >
+                  {filter.label}
+                </TrackedLink>
+              );
+            })}
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
@@ -316,7 +328,7 @@ export default async function Home({ searchParams }: HomeProps) {
                     category,
                     offerAvailability: filter.value,
                     brand,
-                    size,
+                    size: effectiveSize,
                   })}
                   className={getSecondaryFilterClassName(
                     offerAvailability === filter.value,
@@ -346,7 +358,7 @@ export default async function Home({ searchParams }: HomeProps) {
                   q: hasSearch ? q : undefined,
                   category,
                   offerAvailability,
-                  size,
+                  size: effectiveSize,
                 })}
                 className={getSecondaryFilterClassName(brand === undefined)}
                 eventName="brand_filter_clicked"
@@ -370,7 +382,7 @@ export default async function Home({ searchParams }: HomeProps) {
                     category,
                     offerAvailability,
                     brand: b,
-                    size,
+                    size: effectiveSize,
                   })}
                   className={getSecondaryFilterClassName(brand === b)}
                   eventName="brand_filter_clicked"
@@ -389,57 +401,59 @@ export default async function Home({ searchParams }: HomeProps) {
               ))}
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wide text-[#6B5E54]">
-                Tamanho
-              </span>
-              <TrackedLink
-                href={buildHomeHref({
-                  q: hasSearch ? q : undefined,
-                  category,
-                  offerAvailability,
-                  brand,
-                })}
-                className={getSecondaryFilterClassName(size === undefined)}
-                eventName="size_filter_clicked"
-                eventPayload={{
-                  q,
-                  hasSearch,
-                  category,
-                  brand,
-                  size,
-                  offerAvailability,
-                  clickedSize: "all",
-                }}
-              >
-                Todos
-              </TrackedLink>
-              {availableSizes.map((s) => (
+            {shouldShowSizeFilter ? (
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-[#6B5E54]">
+                  Tamanho
+                </span>
                 <TrackedLink
-                  key={s}
                   href={buildHomeHref({
                     q: hasSearch ? q : undefined,
                     category,
                     offerAvailability,
                     brand,
-                    size: s,
                   })}
-                  className={getSecondaryFilterClassName(size === s)}
+                  className={getSecondaryFilterClassName(effectiveSize === undefined)}
                   eventName="size_filter_clicked"
                   eventPayload={{
                     q,
                     hasSearch,
                     category,
                     brand,
-                    size,
+                    size: effectiveSize,
                     offerAvailability,
-                    clickedSize: s,
+                    clickedSize: "all",
                   }}
                 >
-                  {s}
+                  Todos
                 </TrackedLink>
-              ))}
-            </div>
+                {availableSizes.map((s) => (
+                  <TrackedLink
+                    key={s}
+                    href={buildHomeHref({
+                      q: hasSearch ? q : undefined,
+                      category,
+                      offerAvailability,
+                      brand,
+                      size: s,
+                    })}
+                    className={getSecondaryFilterClassName(effectiveSize === s)}
+                    eventName="size_filter_clicked"
+                    eventPayload={{
+                      q,
+                      hasSearch,
+                      category,
+                      brand,
+                      size: effectiveSize,
+                      offerAvailability,
+                      clickedSize: s,
+                    }}
+                  >
+                    {s}
+                  </TrackedLink>
+                ))}
+              </div>
+            ) : null}
           </div>
 
           {activeFilterLabels.length > 0 ? (
@@ -482,7 +496,7 @@ export default async function Home({ searchParams }: HomeProps) {
                     category,
                     offerAvailability,
                     brand,
-                    size,
+                    size: effectiveSize,
                   })}
                   className="text-[#7A5C3E] underline"
                 >
@@ -506,14 +520,44 @@ export default async function Home({ searchParams }: HomeProps) {
           {offerAvailabilityFiltered.length === 0 ? (
             <div className="mt-8 rounded-2xl border border-[#E8D7C5] bg-[#FFFDF9] p-6 text-left">
               <h3 className="text-base font-semibold text-[#2F261F]">
-                Nenhum produto encontrado
+                {hasAnyFilterOrSearchActive
+                  ? "Nenhum produto encontrado com a busca e filtros atuais."
+                  : "Nenhum produto disponível no catálogo mockado."}
               </h3>
               <p className="mt-2 text-sm leading-6 text-[#6B5E54]">
-                Tente buscar por marca, linha, tamanho ou quantidade.
+                {hasAnyFilterOrSearchActive
+                  ? "Tente remover marca, tamanho, disponibilidade de oferta ou ajustar a busca."
+                  : "Tente novamente em alguns instantes."}
               </p>
-              <Link href="/" className="mt-4 inline-block text-[#7A5C3E] underline">
-                Ver todos os produtos
-              </Link>
+
+              <div className="mt-4 flex flex-wrap gap-4">
+                <Link href="/" className="text-[#7A5C3E] underline">
+                  Ver todos os produtos
+                </Link>
+                {hasSearch ? (
+                  <Link
+                    href={buildHomeHref({
+                      category,
+                      offerAvailability,
+                      brand,
+                      size: effectiveSize,
+                    })}
+                    className="text-[#7A5C3E] underline"
+                  >
+                    Limpar busca
+                  </Link>
+                ) : null}
+                {hasAnyNonSearchFilterActive ? (
+                  <Link
+                    href={buildHomeHref({
+                      q: hasSearch ? q : undefined,
+                    })}
+                    className="text-[#7A5C3E] underline"
+                  >
+                    Limpar filtros
+                  </Link>
+                ) : null}
+              </div>
             </div>
           ) : (
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
