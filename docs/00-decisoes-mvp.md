@@ -4,7 +4,7 @@
 
 Documento vivo.
 
-Última atualização: 2026-04-28.
+Última atualização: 2026-04-30.
 
 ---
 
@@ -269,3 +269,41 @@ Critérios de 90 dias:
 - O layout definitivo será criado posteriormente no Figma.
 - Após a definição visual no Figma, o frontend será personalizado com base no novo design.
 - Até lá, priorizar estrutura de dados, catálogo canônico, preço unitário, busca, tracking, afiliados e qualidade de matching.
+
+---
+
+## ADR-001 — Catálogo canônico inicial versionado no repositório
+
+### Contexto
+
+- O Ollibaby precisa comparar produtos recorrentes de bebê com confiança.
+- O MVP começa com fraldas e lenços umedecidos.
+- O catálogo canônico é necessário antes de scraping, afiliados, ranking e banco de dados.
+- Já existe um pipeline em `scripts/catalog` para gerar, revisar, importar, validar e exportar o catálogo.
+- O catálogo aprovado atual tem 26 produtos validados manualmente.
+
+### Decisão
+
+- Manter o catálogo canônico inicial versionado em `src/data/catalog/canonical-products.ts`.
+- O arquivo é gerado automaticamente a partir de `scripts/catalog/data/final/canonical-products.approved.json`.
+- A revisão humana acontece via CSV/Google Sheets.
+- O comando `pnpm run catalog:export-to-app` gera o arquivo consumível pela aplicação.
+- O comando `pnpm run catalog:validate-approved` valida o catálogo aprovado.
+- Não usar banco de dados nesta etapa.
+- Não integrar Firecrawl ainda.
+- Serper/Brave só devem entrar depois, em modo discover, sem crawling.
+
+### Consequências
+
+- Ganho de simplicidade e auditabilidade.
+- Evita custos prematuros de API.
+- Permite usar o catálogo na UI e busca local.
+- Exige disciplina para não editar manualmente o arquivo auto-gerado.
+- Migração futura para Supabase/PostgreSQL continua possível.
+
+### Critérios de aceite
+
+- `pnpm run catalog:test` passa.
+- `pnpm run lint` passa.
+- `pnpm run catalog:validate-approved` retorna `errorsCount` 0.
+- `src/data/catalog/canonical-products.ts` existe e exporta `canonicalProducts`.

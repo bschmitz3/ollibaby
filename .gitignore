@@ -39,3 +39,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.env.local
+
+# catalog pipeline (generated artifacts)
+/scripts/catalog/data/cache/
+/scripts/catalog/data/processed/
+/scripts/catalog/data/review/
+/scripts/catalog/data/final/
+
+# local catalog pipeline outputs
+/data/cache/
+/data/processed/
+/data/review/
+/data/final/

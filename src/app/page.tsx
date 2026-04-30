@@ -1,10 +1,19 @@
 import { ProductCard } from "@/components/product-card";
 import { mockOffers } from "@/data/mock-offers";
-import { mockProducts } from "@/data/mock-products";
+import { searchCanonicalProducts } from "@/lib/catalog/search";
 import { getRankedOffersForProduct } from "@/lib/offers";
 
-export default function Home() {
-  const productsWithBestOffer = mockProducts.map((product) => {
+type HomeProps = {
+  searchParams?: Record<string, string | string[] | undefined>;
+};
+
+export default function Home({ searchParams }: HomeProps) {
+  const qRaw = searchParams?.q;
+  const q = Array.isArray(qRaw) ? qRaw[0] : qRaw;
+
+  const products = q ? searchCanonicalProducts(q) : searchCanonicalProducts("");
+
+  const productsWithBestOffer = products.map((product) => {
     const rankedOffers = getRankedOffersForProduct(mockOffers, product.id);
     const bestOffer = rankedOffers[0];
     return { product, bestOffer };
@@ -27,16 +36,21 @@ export default function Home() {
         </p>
 
         <div className="mt-10 w-full max-w-2xl rounded-3xl bg-white p-3 shadow-lg shadow-[#E8D7C5]/60">
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <form method="GET" className="flex flex-col gap-3 sm:flex-row">
             <input
               type="search"
+              name="q"
+              defaultValue={q ?? ""}
               placeholder="Busque por Pampers G, Huggies Supreme Care, lenço 384 unidades..."
               className="min-h-12 flex-1 rounded-2xl border border-[#E8D7C5] bg-[#FFFDF9] px-4 text-base outline-none transition focus:border-[#C98F5A]"
             />
-            <button className="min-h-12 rounded-2xl bg-[#2F261F] px-6 font-semibold text-white transition hover:bg-[#4A382B]">
+            <button
+              type="submit"
+              className="min-h-12 rounded-2xl bg-[#2F261F] px-6 font-semibold text-white transition hover:bg-[#4A382B]"
+            >
               Buscar
             </button>
-          </div>
+          </form>
         </div>
 
         <div className="mt-8 grid w-full max-w-2xl gap-3 sm:grid-cols-2">

@@ -1,0 +1,114 @@
+[
+  { "title": "Fralda Pampers Confort Sec RN 34 unidades", "retailer": "Amazon", "url": "https://example.com/pampers-confort-sec-rn-34" },
+  { "title": "Fralda Pampers Confort Sec P 48 unidades", "retailer": "Amazon", "url": "https://example.com/pampers-confort-sec-p-48" },
+  { "title": "Fralda Pampers Confort Sec M 60 unidades", "retailer": "Amazon", "url": "https://example.com/pampers-confort-sec-m-60" },
+  { "title": "Fralda Pampers Confort Sec G 52 unidades", "retailer": "Amazon", "url": "https://example.com/pampers-confort-sec-g-52" },
+  { "title": "Fralda Pampers Confort Sec XG 48 unidades", "retailer": "Amazon", "url": "https://example.com/pampers-confort-sec-xg-48" },
+  { "title": "Fraldas Pampers Confort Sec XXG 44 unidades", "retailer": "Magalu", "url": "https://example.com/pampers-confort-sec-xxg-44" },
+  { "title": "Kit Fralda Pampers Confort Sec M kit 4 pacotes 60 unidades", "retailer": "Mercado Livre", "url": "https://example.com/kit-pampers-confort-sec-m-4x60" },
+  { "title": "Pampers Confort Sec G 3x52 fraldas (combo)", "retailer": "Shopee", "url": "https://example.com/pampers-confort-sec-g-3x52" },
+  { "title": "Fralda Pampers Confort Sec tamanho M com 2 pacotes 60 unidades", "retailer": "Mercado Livre", "url": "https://example.com/pampers-m-2-pacotes-60" },
+  { "title": "Fralda Pampers Confort Sec - leve 6 pague 5 (ver descrição)", "retailer": "Amazon", "url": "https://example.com/pampers-leve6pague5" },
+
+  { "title": "Fralda Pampers Pants Ajuste Total M 70 unidades", "retailer": "Amazon", "url": "https://example.com/pampers-pants-m-70" },
+  { "title": "Fralda Pampers Pants Ajuste Total G 64 unidades", "retailer": "Amazon", "url": "https://example.com/pampers-pants-g-64" },
+  { "title": "Fralda Pampers Pants Ajuste Total XG 58 unidades", "retailer": "Magalu", "url": "https://example.com/pampers-pants-xg-58" },
+  { "title": "Kit Pampers Pants M 4x70 fraldas", "retailer": "Mercado Livre", "url": "https://example.com/kit-pants-m-4x70" },
+  { "title": "Pampers Pants XXG 2x52", "retailer": "Shopee", "url": "https://example.com/pants-xxg-2x52" },
+  { "title": "Fralda Pampers Pants (calça) tamanho G", "retailer": "Amazon", "url": "https://example.com/pants-g-sem-quantidade" },
+
+  { "title": "Fralda Huggies Supreme Care RN 36 fraldas", "retailer": "Amazon", "url": "https://example.com/huggies-supreme-care-rn-36" },
+  { "title": "Fralda Huggies Supreme Care P 44 unidades", "retailer": "Magalu", "url": "https://example.com/huggies-supreme-care-p-44" },
+  { "title": "Huggies Supreme Care M 60 unidades", "retailer": "Amazon", "url": "https://example.com/huggies-supreme-care-m-60" },
+  { "title": "Fraldas Huggies Supreme Care G 52 unidades", "retailer": "Mercado Livre", "url": "https://example.com/huggies-supreme-care-g-52" },
+  { "title": "Kit 4 pacotes Fralda Huggies Supreme Care XG 48 unidades", "retailer": "Shopee", "url": "https://example.com/huggies-supreme-care-xg-kit4" },
+
+  { "title": "Fralda Huggies Tripla Proteção P 42 unidades", "retailer": "Amazon", "url": "https://example.com/huggies-tripla-protecao-p-42" },
+  { "title": "Fralda Huggies Tripla Proteção M 52 unidades", "retailer": "Amazon", "url": "https://example.com/huggies-tripla-protecao-m-52" },
+  { "title": "Huggies Tripla Proteção G 44 unidades", "retailer": "Magalu", "url": "https://example.com/huggies-tripla-protecao-g-44" },
+  { "title": "Kit Huggies Tripla Proteção M kit 3 pacotes 52 unidades", "retailer": "Mercado Livre", "url": "https://example.com/kit-huggies-tripla-m-3x52" },
+  { "title": "Fralda Huggies Tripla Proteção XG 2 pacotes 48 unidades", "retailer": "Shopee", "url": "https://example.com/huggies-tripla-xg-2x48" },
+
+  { "title": "Fralda MamyPoko Dia e Noite P 40 unidades", "retailer": "Amazon", "url": "https://example.com/mamypoko-dia-noite-p-40" },
+  { "title": "Fralda MamyPoko Dia e Noite M 44 unidades", "retailer": "Amazon", "url": "https://example.com/mamypoko-dia-noite-m-44" },
+  { "title": "MamyPoko Dia e Noite G 40 unidades", "retailer": "Mercado Livre", "url": "https://example.com/mamypoko-dia-noite-g-40" },
+  { "title": "Kit 4 pacotes MamyPoko Dia e Noite XG 38 unidades", "retailer": "Shopee", "url": "https://example.com/mamypoko-xg-kit4-38" },
+  { "title": "MamyPoko Dia e Noite XXG 34 unidades", "retailer": "Magalu", "url": "https://example.com/mamypoko-xxg-34" },
+
+  { "title": "Fralda Personal Baby M 60 unidades", "retailer": "Amazon", "url": "https://example.com/personal-baby-m-60" },
+  { "title": "Fralda Personal Baby G 52 unidades", "retailer": "Amazon", "url": "https://example.com/personal-baby-g-52" },
+  { "title": "Personal Baby XG 48 unidades", "retailer": "Magalu", "url": "https://example.com/personal-baby-xg-48" },
+  { "title": "Kit 3 pacotes Fralda Personal Baby M 60 unidades", "retailer": "Mercado Livre", "url": "https://example.com/personal-m-kit3" },
+
+  { "title": "Fralda Babysec UltraSec P 44 unidades", "retailer": "Amazon", "url": "https://example.com/babysec-p-44" },
+  { "title": "Fralda Babysec UltraSec M 50 unidades", "retailer": "Shopee", "url": "https://example.com/babysec-m-50" },
+  { "title": "Fralda Babysec UltraSec G 44 unidades", "retailer": "Magalu", "url": "https://example.com/babysec-g-44" },
+  { "title": "Kit Babysec UltraSec M 4 pacotes 50 unidades", "retailer": "Mercado Livre", "url": "https://example.com/babysec-m-kit4" },
+
+  { "title": "Fralda Pom Pom Protek Proteção de Mãe M 60 unidades", "retailer": "Amazon", "url": "https://example.com/pompom-m-60" },
+  { "title": "Pom Pom Protek G 52 unidades", "retailer": "Magalu", "url": "https://example.com/pompom-g-52" },
+  { "title": "Kit Pom Pom Protek XG 3x48 fraldas", "retailer": "Mercado Livre", "url": "https://example.com/pompom-xg-3x48" },
+
+  { "title": "Fralda Needs Premium M 60 unidades", "retailer": "Panvel", "url": "https://example.com/needs-m-60" },
+  { "title": "Needs Fralda Pants G 58 unidades", "retailer": "Panvel", "url": "https://example.com/needs-pants-g-58" },
+  { "title": "Kit Needs Fralda M 4 pacotes 60 unidades", "retailer": "Panvel", "url": "https://example.com/needs-m-kit4-60" },
+
+  { "title": "Lenços Umedecidos Pampers Higiene Completa 48 unidades", "retailer": "Amazon", "url": "https://example.com/pampers-wipes-48" },
+  { "title": "Lenço Umedecido Pampers 96 unidades", "retailer": "Amazon", "url": "https://example.com/pampers-wipes-96" },
+  { "title": "Lenços Umedecidos Pampers 100 unidades", "retailer": "Magalu", "url": "https://example.com/pampers-wipes-100" },
+  { "title": "Kit Lenço Pampers 4 pacotes 48 lenços", "retailer": "Mercado Livre", "url": "https://example.com/pampers-wipes-4x48" },
+  { "title": "Pampers Lenços 2x96 unidades", "retailer": "Shopee", "url": "https://example.com/pampers-wipes-2x96" },
+  { "title": "Lenços Umedecidos Pampers 6 pacotes de 96 unidades", "retailer": "Mercado Livre", "url": "https://example.com/pampers-wipes-6x96" },
+
+  { "title": "Lenços Umedecidos Huggies Supreme Care 48 unidades", "retailer": "Amazon", "url": "https://example.com/huggies-wipes-48" },
+  { "title": "Lenços Umedecidos Huggies 96 unidades", "retailer": "Magalu", "url": "https://example.com/huggies-wipes-96" },
+  { "title": "Huggies Lenços Umedecidos 192 unidades", "retailer": "Mercado Livre", "url": "https://example.com/huggies-wipes-192" },
+  { "title": "Kit 4 pacotes de 48 lenços umedecidos Huggies", "retailer": "Shopee", "url": "https://example.com/huggies-wipes-4x48" },
+  { "title": "Huggies lenços 576 unidades (kit 6 pacotes 96)", "retailer": "Mercado Livre", "url": "https://example.com/huggies-wipes-6x96" },
+
+  { "title": "Lenços Umedecidos MamyPoko 48 unidades", "retailer": "Amazon", "url": "https://example.com/mamypoko-wipes-48" },
+  { "title": "Lenço Umedecido MamyPoko 96 unidades", "retailer": "Amazon", "url": "https://example.com/mamypoko-wipes-96" },
+  { "title": "Kit Lenços MamyPoko 4 pacotes 96 unidades", "retailer": "Mercado Livre", "url": "https://example.com/mamypoko-wipes-4x96" },
+
+  { "title": "Lenços Umedecidos Granado Bebê 100 unidades", "retailer": "Amazon", "url": "https://example.com/granado-wipes-100" },
+  { "title": "Lenços Umedecidos Johnson's Baby 48 unidades", "retailer": "Amazon", "url": "https://example.com/johnsons-wipes-48" },
+  { "title": "Lenços Umedecidos Needs 96 unidades", "retailer": "Panvel", "url": "https://example.com/needs-wipes-96" },
+  { "title": "Kit Lenços Needs 6 pacotes de 96 unidades", "retailer": "Panvel", "url": "https://example.com/needs-wipes-6x96" },
+  { "title": "Lenços Umedecidos Baby Dove 48 unidades", "retailer": "Amazon", "url": "https://example.com/baby-dove-wipes-48" },
+  { "title": "Lenços Umedecidos Mustela 60 unidades", "retailer": "Amazon", "url": "https://example.com/mustela-wipes-60" },
+  { "title": "Lenços Umedecidos Fisher-Price 100 unidades", "retailer": "Magalu", "url": "https://example.com/fisher-price-wipes-100" },
+  { "title": "Lenços Umedecidos Cremer 192 unidades", "retailer": "Mercado Livre", "url": "https://example.com/cremer-wipes-192" },
+  { "title": "Lenços Umedecidos Cottonbaby 384 unidades (4 pacotes 96)", "retailer": "Shopee", "url": "https://example.com/cottonbaby-wipes-4x96" },
+  { "title": "Lenços Umedecidos FeelClean 576 unidades 6x96", "retailer": "Mercado Livre", "url": "https://example.com/feelclean-wipes-6x96" },
+
+  { "title": "Lenço Umedecido Meu Bebê 48 unidades - embalagem econômica", "retailer": "Amazon", "url": "https://example.com/meu-bebe-wipes-48" },
+  { "title": "Kit com 4 pacotes de 48 lenços umedecidos Meu Bebê", "retailer": "Shopee", "url": "https://example.com/meu-bebe-wipes-4x48" },
+  { "title": "Lenços Umedecidos Anjinho 96 unidades", "retailer": "Mercado Livre", "url": "https://example.com/anjinho-wipes-96" },
+  { "title": "Lenços Umedecidos Piquitucho 100 unidades", "retailer": "Magalu", "url": "https://example.com/piquitucho-wipes-100" },
+
+  { "title": "Lenços Umedecidos Huggies 96 unidades (com 2 pacotes 96 unidades)", "retailer": "Shopee", "url": "https://example.com/huggies-wipes-conflito-96-2x96" },
+  { "title": "Lenços Umedecidos Pampers 192 unidades (kit) 4 pacotes 48", "retailer": "Amazon", "url": "https://example.com/pampers-wipes-192-4x48" },
+  { "title": "Lenços Umedecidos Pampers - leve 6 pague 5", "retailer": "Mercado Livre", "url": "https://example.com/pampers-wipes-leve6" },
+
+  { "title": "Fralda Pampers Premium Care M 60 unidades", "retailer": "Amazon", "url": "https://example.com/pampers-premium-care-m-60" },
+  { "title": "Pampers Premium Care G 52 unidades", "retailer": "Amazon", "url": "https://example.com/pampers-premium-care-g-52" },
+  { "title": "Kit Pampers Premium Care XG 3 pacotes 48 unidades", "retailer": "Mercado Livre", "url": "https://example.com/pampers-premium-care-xg-3x48" },
+
+  { "title": "Fralda Huggies Supreme Care Tripla Proteção M 60 unidades", "retailer": "Amazon", "url": "https://example.com/huggies-linha-ambigua" },
+  { "title": "Fralda Turma da Mônica M 60 unidades", "retailer": "Magalu", "url": "https://example.com/turma-monica-m-60" },
+  { "title": "Fralda Cremer Baby G 52 unidades", "retailer": "Amazon", "url": "https://example.com/cremer-baby-g-52" },
+  { "title": "Fralda Capricho Baby M 60 unidades", "retailer": "Amazon", "url": "https://example.com/capricho-m-60" },
+  { "title": "Fralda Parent's Choice G 50 unidades", "retailer": "Amazon", "url": "https://example.com/parents-choice-g-50" },
+
+  { "title": "Pomada Bepantol Baby 30g", "retailer": "Amazon", "url": "https://example.com/bepantol-pomada" },
+  { "title": "Fórmula Infantil NAN 800g", "retailer": "Amazon", "url": "https://example.com/nan-800g" },
+  { "title": "Vitamina para bebê - suplemento 30 cápsulas", "retailer": "Shopee", "url": "https://example.com/vitamina-bebe" },
+  { "title": "Brinquedo Fisher-Price chocalho colorido", "retailer": "Amazon", "url": "https://example.com/brinquedo-chocalho" },
+
+  { "title": "Fralda Huggies Supreme Care M 60 unidades + 100 unidades (erro no título)", "retailer": "Mercado Livre", "url": "https://example.com/huggies-conflito-60-100" },
+  { "title": "Fralda Pampers Confort Sec (tamanho não informado) 60 unidades", "retailer": "Amazon", "url": "https://example.com/pampers-sem-tamanho-60" },
+  { "title": "Lenços Umedecidos Huggies 48 un", "retailer": "Magalu", "url": "https://example.com/huggies-wipes-48-un" },
+  { "title": "Lenço Umedecido Pampers 96un kit 2 pacotes", "retailer": "Shopee", "url": "https://example.com/pampers-wipes-96-kit2" },
+  { "title": "Kit com 4 pacotes de 48 lenços", "retailer": "Amazon", "url": "https://example.com/sem-marca-wipes-4x48" }
+]
+

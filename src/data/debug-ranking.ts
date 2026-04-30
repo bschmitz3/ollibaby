@@ -1,13 +1,14 @@
-import { mockProducts } from "@/data/mock-products";
 import { mockOffers } from "@/data/mock-offers";
 import {
   getEffectiveUnitPriceInCents,
   getRankedOffersForProduct,
 } from "@/lib/offers";
 import { formatUnitPriceFromCents } from "@/lib/formatters";
+import { getCanonicalProducts } from "@/lib/catalog/search";
 
 export function debugRanking(): void {
-  for (const product of mockProducts) {
+  const products = getCanonicalProducts();
+  for (const product of products) {
     const rankedOffers = getRankedOffersForProduct(mockOffers, product.id);
 
     console.log("—".repeat(72));

@@ -7,7 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "debug:ranking": "tsx src/data/debug-ranking.ts"
+    "debug:ranking": "tsx src/data/debug-ranking.ts",
+    "catalog:mock": "tsx scripts/catalog/src/run.ts mock",
+    "catalog:export-review": "tsx scripts/catalog/src/run.ts export_review",
+    "catalog:import-review": "tsx scripts/catalog/src/run.ts import_review",
+    "catalog:validate-approved": "tsx scripts/catalog/src/validators/validate-approved.ts",
+    "catalog:export-to-app": "tsx scripts/catalog/src/exporters/export-to-app-catalog.ts",
+    "catalog:test": "vitest run --config scripts/catalog/vitest.config.ts"
   },
   "dependencies": {
     "next": "16.2.4",
@@ -23,6 +29,7 @@
     "eslint-config-next": "16.2.4",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.4"
   }
 }
