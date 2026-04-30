@@ -4,13 +4,15 @@ import {
   formatUnitPriceFromCents,
 } from "@/lib/formatters";
 import { getEffectiveUnitPriceInCents } from "@/lib/offers";
+import { ReportOfferError } from "@/components/report-offer-error";
 
 export type OfferCardProps = {
   offer: Offer;
   rank: number;
+  productId: string;
 };
 
-export function OfferCard({ offer, rank }: OfferCardProps) {
+export function OfferCard({ offer, rank, productId }: OfferCardProps) {
   const effectiveUnitPriceInCents = getEffectiveUnitPriceInCents(offer);
 
   const productPriceLabel = formatCurrencyFromCents(offer.priceInCents);
@@ -58,14 +60,17 @@ export function OfferCard({ offer, rank }: OfferCardProps) {
           </h3>
         </div>
 
-        <a
-          href={offerUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="shrink-0 rounded-xl bg-[#2F261F] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#4A382B]"
-        >
-          Ver oferta
-        </a>
+        <div className="flex shrink-0 flex-col items-end gap-2">
+          <a
+            href={offerUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-xl bg-[#2F261F] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#4A382B]"
+          >
+            Ver oferta
+          </a>
+          <ReportOfferError offerId={offer.id} productId={productId} />
+        </div>
       </div>
 
       <div className="mt-4 rounded-2xl bg-[#FFFDF9] p-4">

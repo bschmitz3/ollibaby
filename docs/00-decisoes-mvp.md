@@ -103,6 +103,22 @@ O MVP não inclui:
 
 ---
 
+## 5.1 Hold (institucional/marketing/editorial)
+
+Decisão de foco do MVP: **novas seções institucionais/marketing** e **explicações editoriais amplas** ficam em hold.
+
+Isso **não** significa remover o que já existe — apenas **não expandir agora**.
+
+Foco imediato do desenvolvimento:
+
+- confiança na comparação;
+- qualidade dos sinais de oferta (matching, quantidade, frete, disponibilidade, atualização);
+- filtros úteis;
+- tracking básico futuro;
+- histórico de preço mockado futuro.
+
+---
+
 ## 6. Categorias iniciais
 
 | Categoria | Status | Justificativa |
