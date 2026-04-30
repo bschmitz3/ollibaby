@@ -11,11 +11,31 @@ export type OfferCardProps = {
 };
 
 export function OfferCard({ offer, rank }: OfferCardProps) {
-  const totalPriceInCents = offer.totalPriceInCents ?? offer.priceInCents;
   const effectiveUnitPriceInCents = getEffectiveUnitPriceInCents(offer);
 
-  const totalPriceLabel = formatCurrencyFromCents(totalPriceInCents);
-  const unitPriceLabel = formatUnitPriceFromCents(
+  const productPriceLabel = formatCurrencyFromCents(offer.priceInCents);
+
+  const shippingLabel =
+    offer.shippingPriceInCents === undefined
+      ? "Frete: não informado"
+      : offer.shippingPriceInCents === 0
+        ? "Frete: grátis"
+        : `Frete: ${formatCurrencyFromCents(offer.shippingPriceInCents)}`;
+
+  const totalConsideredInCents = offer.totalPriceInCents ?? offer.priceInCents;
+  const totalConsideredLabel = formatCurrencyFromCents(totalConsideredInCents);
+
+  const unitPriceWithoutShippingLabel = formatUnitPriceFromCents(
+    offer.unitPriceWithoutShippingInCents,
+    offer.unitType,
+  );
+
+  const unitPriceWithShippingLabel =
+    offer.unitPriceWithShippingInCents === undefined
+      ? "não informado"
+      : formatUnitPriceFromCents(offer.unitPriceWithShippingInCents, offer.unitType);
+
+  const effectiveUnitPriceLabel = formatUnitPriceFromCents(
     effectiveUnitPriceInCents,
     offer.unitType,
   );
@@ -49,8 +69,23 @@ export function OfferCard({ offer, rank }: OfferCardProps) {
       </div>
 
       <div className="mt-4 rounded-2xl bg-[#FFFDF9] p-4">
-        <p className="text-base font-semibold text-[#2F261F]">{unitPriceLabel}</p>
-        <p className="mt-1 text-sm text-[#6B5E54]">Total: {totalPriceLabel}</p>
+        <p className="text-xs font-medium text-[#6B5E54]">Preço usado no ranking</p>
+        <p className="mt-1 text-base font-semibold text-[#2F261F]">
+          {effectiveUnitPriceLabel}
+        </p>
+        <p className="mt-1 text-sm text-[#6B5E54]">
+          {offer.unitPriceWithShippingInCents === undefined
+            ? "Ranking considera apenas o preço do produto, pois o frete não foi informado."
+            : "Ranking considera produto + frete."}
+        </p>
+
+        <div className="mt-4 grid gap-1 text-sm text-[#6B5E54]">
+          <p>Preço do produto: {productPriceLabel}</p>
+          <p>{shippingLabel}</p>
+          <p>Total considerado: {totalConsideredLabel}</p>
+          <p>Preço por unidade (sem frete): {unitPriceWithoutShippingLabel}</p>
+          <p>Preço por unidade (com frete): {unitPriceWithShippingLabel}</p>
+        </div>
 
         <div className="mt-3 flex flex-wrap gap-2 text-xs text-[#6B5E54]">
           <span className="rounded-full border border-[#E8D7C5] bg-white px-3 py-1">
