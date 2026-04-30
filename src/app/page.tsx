@@ -146,6 +146,27 @@ export default async function Home({ searchParams }: HomeProps) {
   const sizeValue = Array.isArray(sizeRaw) ? sizeRaw[0] : sizeRaw ?? undefined;
   const size = normalizeOptionalText(sizeValue);
 
+  const activeFilterLabels: string[] = [];
+  if (hasSearch) {
+    activeFilterLabels.push(`Busca: "${q}"`);
+  }
+  if (category === "diaper") {
+    activeFilterLabels.push("Fraldas");
+  } else if (category === "wet_wipe") {
+    activeFilterLabels.push("Lenços");
+  }
+  if (offerAvailability === "with_offer") {
+    activeFilterLabels.push("Com oferta");
+  } else if (offerAvailability === "without_offer") {
+    activeFilterLabels.push("Sem oferta");
+  }
+  if (brand) {
+    activeFilterLabels.push(`Marca: ${brand}`);
+  }
+  if (size) {
+    activeFilterLabels.push(`Tamanho: ${size}`);
+  }
+
   const searchedProducts = searchCanonicalProducts(q);
   const categoryFiltered =
     category === "all"
@@ -414,6 +435,24 @@ export default async function Home({ searchParams }: HomeProps) {
               ))}
             </div>
           </div>
+
+          {activeFilterLabels.length > 0 ? (
+            <div className="mt-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#6B5E54]">
+                Filtros ativos
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {activeFilterLabels.map((label) => (
+                  <span
+                    key={label}
+                    className="rounded-full border border-[#E8D7C5] bg-[#FFFDF9] px-3 py-1 text-xs font-semibold text-[#6B5E54]"
+                  >
+                    {label}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
 
           <div className="mt-4 flex flex-col gap-2 text-sm text-[#6B5E54] sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
