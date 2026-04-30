@@ -1,5 +1,7 @@
 import { ComparisonExplainer } from "@/components/comparison-explainer";
 import { ProductCard } from "@/components/product-card";
+import { SearchForm } from "@/components/search-form";
+import { TrackedLink } from "@/components/tracked-link";
 import { mockOffers } from "@/data/mock-offers";
 import { searchCanonicalProducts } from "@/lib/catalog/search";
 import { getRankedOffersForProduct } from "@/lib/offers";
@@ -89,21 +91,7 @@ export default async function Home({ searchParams }: HomeProps) {
         </p>
 
         <div className="mt-10 w-full max-w-2xl rounded-3xl bg-white p-3 shadow-lg shadow-[#E8D7C5]/60">
-          <form method="GET" className="flex flex-col gap-3 sm:flex-row">
-            <input
-              type="search"
-              name="q"
-              defaultValue={q}
-              placeholder="Busque por Pampers G, Huggies Supreme Care, lenço 384 unidades..."
-              className="min-h-12 flex-1 rounded-2xl border border-[#E8D7C5] bg-[#FFFDF9] px-4 text-base outline-none transition focus:border-[#C98F5A]"
-            />
-            <button
-              type="submit"
-              className="min-h-12 rounded-2xl bg-[#2F261F] px-6 font-semibold text-white transition hover:bg-[#4A382B]"
-            >
-              Buscar
-            </button>
-          </form>
+          <SearchForm defaultQuery={q} />
         </div>
 
         <div className="mt-8 grid w-full max-w-2xl gap-3 sm:grid-cols-2">
@@ -146,16 +134,22 @@ export default async function Home({ searchParams }: HomeProps) {
 
           <div className="mt-6 flex flex-wrap gap-2 text-sm">
             {CATEGORY_FILTERS.map((filter) => (
-              <Link
+              <TrackedLink
                 key={filter.value}
                 href={buildHomeHref({
                   q: hasSearch ? q : undefined,
                   category: filter.value,
                 })}
                 className={getCategoryFilterClassName(category === filter.value)}
+                eventName="category_filter_clicked"
+                eventPayload={{
+                  category: filter.value,
+                  q,
+                  hasSearch,
+                }}
               >
                 {filter.label}
-              </Link>
+              </TrackedLink>
             ))}
           </div>
 

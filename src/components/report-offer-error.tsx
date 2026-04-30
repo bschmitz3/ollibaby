@@ -1,3 +1,5 @@
+import { TrackedLink } from "@/components/tracked-link";
+
 type ReportOfferErrorProps = {
   offerId: string;
   productId: string;
@@ -33,9 +35,17 @@ export function ReportOfferError({ offerId, productId }: ReportOfferErrorProps) 
   const href = buildReportOfferErrorHref({ offerId, productId });
 
   return (
-    <a href={href} className="text-xs font-medium text-[#7A5C3E] underline">
+    <TrackedLink
+      href={href}
+      className="text-xs font-medium text-[#7A5C3E] underline"
+      eventName="offer_error_report_clicked"
+      eventPayload={{
+        offerId,
+        productId,
+      }}
+    >
       Reportar erro
-    </a>
+    </TrackedLink>
   );
 }
 

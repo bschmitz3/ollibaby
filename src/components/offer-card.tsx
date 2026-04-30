@@ -5,6 +5,7 @@ import {
 } from "@/lib/formatters";
 import { getEffectiveUnitPriceInCents } from "@/lib/offers";
 import { ReportOfferError } from "@/components/report-offer-error";
+import { TrackedLink } from "@/components/tracked-link";
 
 export type OfferCardProps = {
   offer: Offer;
@@ -47,6 +48,7 @@ export function OfferCard({ offer, rank, productId }: OfferCardProps) {
   const quantityPercent = Math.round(offer.quantityConfidence * 100);
 
   const offerUrl = offer.affiliateUrl ?? offer.url;
+  const destinationType = offer.affiliateUrl ? "affiliate" : "direct";
 
   return (
     <div className="rounded-2xl border border-[#E8D7C5] bg-white p-5 shadow-sm">
@@ -61,14 +63,23 @@ export function OfferCard({ offer, rank, productId }: OfferCardProps) {
         </div>
 
         <div className="flex shrink-0 flex-col items-end gap-2">
-          <a
+          <TrackedLink
             href={offerUrl}
+            className="rounded-xl bg-[#2F261F] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#4A382B]"
             target="_blank"
             rel="noreferrer"
-            className="rounded-xl bg-[#2F261F] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#4A382B]"
+            eventName="offer_clicked"
+            eventPayload={{
+              offerId: offer.id,
+              productId,
+              isAffiliate: offer.isAffiliate,
+              unitType: offer.unitType,
+              effectiveUnitPriceInCents,
+              destinationType,
+            }}
           >
             Ver oferta
-          </a>
+          </TrackedLink>
           <ReportOfferError offerId={offer.id} productId={productId} />
         </div>
       </div>

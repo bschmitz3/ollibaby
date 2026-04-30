@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { OfferCard } from "@/components/offer-card";
+import { ProductViewTracker } from "@/components/product-view-tracker";
 import { mockOffers } from "@/data/mock-offers";
 import { getCanonicalProducts } from "@/lib/catalog/search";
 import { getRankedOffersForProduct } from "@/lib/offers";
@@ -67,6 +68,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <Link href="/" className="text-sm font-medium text-[#7A5C3E] underline">
           Voltar
         </Link>
+
+        <ProductViewTracker
+          productId={product.id}
+          category={product.category}
+          brand={product.brand}
+          line={product.line}
+          quantity={product.quantity}
+          unitType={product.unitType}
+          rankedOffersCount={rankedOffers.length}
+        />
 
         <div className="mt-6 rounded-3xl bg-white p-6 shadow-lg shadow-[#E8D7C5]/60 sm:p-10">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
