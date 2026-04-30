@@ -64,7 +64,11 @@ export default async function Home({ searchParams }: HomeProps) {
   const productsWithBestOffer = products.map((product) => {
     const rankedOffers = getRankedOffersForProduct(mockOffers, product.id);
     const bestOffer = rankedOffers[0];
-    return { product, bestOffer };
+    return {
+      product,
+      bestOffer,
+      rankedOffersCount: rankedOffers.length,
+    };
   });
 
   return (
@@ -193,13 +197,16 @@ export default async function Home({ searchParams }: HomeProps) {
             </div>
           ) : (
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {productsWithBestOffer.map(({ product, bestOffer }) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  bestOffer={bestOffer}
-                />
-              ))}
+              {productsWithBestOffer.map(
+                ({ product, bestOffer, rankedOffersCount }) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    bestOffer={bestOffer}
+                    rankedOffersCount={rankedOffersCount}
+                  />
+                ),
+              )}
             </div>
           )}
         </div>

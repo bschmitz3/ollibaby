@@ -10,9 +10,14 @@ import Link from "next/link";
 export type ProductCardProps = {
   product: CanonicalProduct;
   bestOffer?: Offer;
+  rankedOffersCount?: number;
 };
 
-export function ProductCard({ product, bestOffer }: ProductCardProps) {
+export function ProductCard({
+  product,
+  bestOffer,
+  rankedOffersCount,
+}: ProductCardProps) {
   const hasBestOffer = bestOffer !== undefined;
 
   const sizeLabel = product.size ? String(product.size) : undefined;
@@ -73,6 +78,27 @@ export function ProductCard({ product, bestOffer }: ProductCardProps) {
       </div>
 
       <div className="mt-4 rounded-2xl bg-[#FFFDF9] p-4">
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          {hasBestOffer ? (
+            <>
+              <span className="rounded-full bg-[#2F261F] px-3 py-1 text-xs font-semibold text-white">
+                Melhor oferta
+              </span>
+              {rankedOffersCount !== undefined ? (
+                <span className="rounded-full border border-[#E8D7C5] bg-white px-3 py-1 text-xs font-medium text-[#6B5E54]">
+                  {rankedOffersCount === 1
+                    ? "1 oferta ranqueável"
+                    : `${rankedOffersCount} ofertas ranqueáveis`}
+                </span>
+              ) : null}
+            </>
+          ) : (
+            <span className="rounded-full border border-[#D4C4B4] bg-[#FFF8F1] px-3 py-1 text-xs font-medium text-[#6B5E54]">
+              Sem oferta no mock
+            </span>
+          )}
+        </div>
+
         {hasBestOffer ? (
           <div className="flex flex-col gap-2">
             <div className="flex flex-wrap items-center justify-between gap-2">

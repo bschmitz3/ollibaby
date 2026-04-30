@@ -65,6 +65,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
               Ofertas ranqueadas
             </h2>
 
+            <p className="mt-2 text-sm text-[#6B5E54]">
+              {rankedOffers.length > 0
+                ? rankedOffers.length === 1
+                  ? "1 oferta ranqueável encontrada para este produto."
+                  : `${rankedOffers.length} ofertas ranqueáveis encontradas para este produto.`
+                : "Ainda não há ofertas mockadas para este produto."}
+            </p>
+
+            {rankedOffers.length > 0 ? (
+              <p className="mt-2 text-sm leading-6 text-[#6B5E54]">
+                A primeira oferta é a melhor pelo menor preço unitário efetivo entre
+                as ofertas elegíveis.
+              </p>
+            ) : null}
+
             {rankedOffers.length === 0 ? (
               <div className="mt-4 rounded-2xl border border-[#E8D7C5] bg-[#FFFDF9] p-6">
                 <p className="text-sm text-[#6B5E54]">
