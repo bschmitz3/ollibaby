@@ -5,11 +5,12 @@ import { getRankedOffersForProduct } from "@/lib/offers";
 import Link from "next/link";
 
 type HomeProps = {
-  searchParams?: Record<string, string | string[] | undefined>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export default function Home({ searchParams }: HomeProps) {
-  const qRaw = searchParams?.q;
+export default async function Home({ searchParams }: HomeProps) {
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const qRaw = resolvedSearchParams?.q;
   const q = (Array.isArray(qRaw) ? qRaw[0] : qRaw ?? "").trim();
   const hasSearch = q.length > 0;
 

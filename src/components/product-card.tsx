@@ -5,6 +5,7 @@ import {
   formatUnitPriceFromCents,
 } from "@/lib/formatters";
 import { getEffectiveUnitPriceInCents } from "@/lib/offers";
+import Link from "next/link";
 
 export type ProductCardProps = {
   product: CanonicalProduct;
@@ -104,6 +105,15 @@ export function ProductCard({ product, bestOffer }: ProductCardProps) {
             Nenhuma oferta confiável encontrada ainda.
           </p>
         )}
+      </div>
+
+      <div className="mt-4">
+        <Link
+          href={`/produtos/${product.id}`}
+          className="text-sm font-medium text-[#7A5C3E] underline"
+        >
+          Ver detalhes
+        </Link>
       </div>
     </div>
   );
