@@ -15,10 +15,13 @@
     "catalog:import-review": "tsx scripts/catalog/src/run.ts import_review",
     "catalog:validate-approved": "tsx scripts/catalog/src/validators/validate-approved.ts",
     "catalog:export-to-app": "tsx scripts/catalog/src/exporters/export-to-app-catalog.ts",
+    "catalog:typecheck": "tsc --project scripts/catalog/tsconfig.json",
     "catalog:test": "vitest run --config scripts/catalog/vitest.config.ts"
   },
   "dependencies": {
     "next": "16.2.4",
+    "posthog-js": "^1.372.5",
+    "posthog-node": "^5.32.1",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },

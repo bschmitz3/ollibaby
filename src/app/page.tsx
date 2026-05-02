@@ -3,6 +3,7 @@ import { ProductCard } from "@/components/product-card";
 import { SearchForm } from "@/components/search-form";
 import { TrackedLink } from "@/components/tracked-link";
 import { mockOffers } from "@/data/mock-offers";
+import { AnalyticsEvent } from "@/lib/analytics";
 import { searchCanonicalProducts } from "@/lib/catalog/search";
 import { getRankedOffersForProduct } from "@/lib/offers";
 import Link from "next/link";
@@ -298,7 +299,7 @@ export default async function Home({ searchParams }: HomeProps) {
                     size: shouldKeepSizeForNextCategory ? effectiveSize : undefined,
                   })}
                   className={getCategoryFilterClassName(category === filter.value)}
-                  eventName="category_filter_clicked"
+                  eventName={AnalyticsEvent.CATEGORY_FILTER_CLICKED}
                   eventPayload={{
                     q,
                     hasSearch,
@@ -333,7 +334,7 @@ export default async function Home({ searchParams }: HomeProps) {
                   className={getSecondaryFilterClassName(
                     offerAvailability === filter.value,
                   )}
-                  eventName="offer_availability_filter_clicked"
+                  eventName={AnalyticsEvent.OFFER_AVAILABILITY_FILTER_CLICKED}
                   eventPayload={{
                     q,
                     hasSearch,
@@ -361,7 +362,7 @@ export default async function Home({ searchParams }: HomeProps) {
                   size: effectiveSize,
                 })}
                 className={getSecondaryFilterClassName(brand === undefined)}
-                eventName="brand_filter_clicked"
+                eventName={AnalyticsEvent.BRAND_FILTER_CLICKED}
                 eventPayload={{
                   q,
                   hasSearch,
@@ -385,7 +386,7 @@ export default async function Home({ searchParams }: HomeProps) {
                     size: effectiveSize,
                   })}
                   className={getSecondaryFilterClassName(brand === b)}
-                  eventName="brand_filter_clicked"
+                  eventName={AnalyticsEvent.BRAND_FILTER_CLICKED}
                   eventPayload={{
                     q,
                     hasSearch,
@@ -414,7 +415,7 @@ export default async function Home({ searchParams }: HomeProps) {
                     brand,
                   })}
                   className={getSecondaryFilterClassName(effectiveSize === undefined)}
-                  eventName="size_filter_clicked"
+                  eventName={AnalyticsEvent.SIZE_FILTER_CLICKED}
                   eventPayload={{
                     q,
                     hasSearch,
@@ -438,7 +439,7 @@ export default async function Home({ searchParams }: HomeProps) {
                       size: s,
                     })}
                     className={getSecondaryFilterClassName(effectiveSize === s)}
-                    eventName="size_filter_clicked"
+                    eventName={AnalyticsEvent.SIZE_FILTER_CLICKED}
                     eventPayload={{
                       q,
                       hasSearch,

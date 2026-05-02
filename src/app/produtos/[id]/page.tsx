@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { Fragment } from "react";
+
 import { OfferCard } from "@/components/offer-card";
+import { OfferViewTracker } from "@/components/offer-view-tracker";
 import { PriceHistorySummary } from "@/components/price-history-summary";
 import { ProductViewTracker } from "@/components/product-view-tracker";
+import { ProductWithoutOfferTracker } from "@/components/product-without-offer-tracker";
 import { mockOffers } from "@/data/mock-offers";
 import { getCanonicalProducts } from "@/lib/catalog/search";
 import { getEffectiveUnitPriceInCents, getRankedOffersForProduct } from "@/lib/offers";
@@ -83,6 +87,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
           unitType={product.unitType}
           rankedOffersCount={rankedOffers.length}
         />
+        {rankedOffers.length === 0 && (
+          <ProductWithoutOfferTracker
+            productId={product.id}
+            productName={product.name}
+            category={product.category}
+            brand={product.brand}
+            line={product.line}
+            size={product.size ?? null}
+            eligibleOffersCount={rankedOffers.length}
+          />
+        )}
 
         <div className="mt-6 rounded-3xl bg-white p-6 shadow-lg shadow-[#E8D7C5]/60 sm:p-10">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -156,12 +171,23 @@ export default async function ProductPage({ params }: ProductPageProps) {
             ) : (
               <div className="mt-4 grid gap-4">
                 {rankedOffers.map((offer, idx) => (
-                  <OfferCard
-                    key={offer.id}
-                    offer={offer}
-                    rank={idx + 1}
-                    productId={product.id}
-                  />
+                  <Fragment key={offer.id}>
+                    <OfferViewTracker
+                      productId={product.id}
+                      offerId={offer.id}
+                      retailerId={offer.retailerId}
+                      sellerName={offer.sellerName}
+                      unitPriceInCents={offer.unitPriceWithoutShippingInCents}
+                      unitPriceWithShippingInCents={offer.unitPriceWithShippingInCents}
+                      isAffiliate={offer.isAffiliate}
+                      rankPosition={idx + 1}
+                    />
+                    <OfferCard
+                      offer={offer}
+                      rank={idx + 1}
+                      productId={product.id}
+                    />
+                  </Fragment>
                 ))}
               </div>
             )}

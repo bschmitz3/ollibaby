@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-import { trackEvent } from "@/lib/analytics";
+import { AnalyticsEvent, trackEvent } from "@/lib/analytics";
 
 export type ProductViewTrackerProps = {
   productId: string;
@@ -24,7 +24,7 @@ export function ProductViewTracker({
   rankedOffersCount,
 }: ProductViewTrackerProps) {
   useEffect(() => {
-    trackEvent("product_viewed", {
+    trackEvent(AnalyticsEvent.CANONICAL_PRODUCT_VIEWED, {
       productId,
       category,
       brand,

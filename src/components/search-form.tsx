@@ -1,6 +1,6 @@
 "use client";
 
-import { trackEvent } from "@/lib/analytics";
+import { AnalyticsEvent, trackEvent } from "@/lib/analytics";
 
 export type SearchFormProps = {
   defaultQuery: string;
@@ -27,7 +27,7 @@ export function SearchForm({
         const q = String(formData.get("q") ?? "");
         const trimmed = q.trim();
 
-        trackEvent("search_submitted", {
+        trackEvent(AnalyticsEvent.SEARCH_PERFORMED, {
           q: trimmed,
           hasSearch: trimmed.length > 0,
           category,

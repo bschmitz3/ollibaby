@@ -13,6 +13,8 @@ export type TrackedLinkProps = {
   rel?: string;
   eventName: AnalyticsEventName;
   eventPayload?: AnalyticsEventPayload;
+  secondaryEventName?: AnalyticsEventName;
+  secondaryEventPayload?: AnalyticsEventPayload;
 };
 
 export function TrackedLink({
@@ -23,6 +25,8 @@ export function TrackedLink({
   rel,
   eventName,
   eventPayload,
+  secondaryEventName,
+  secondaryEventPayload,
 }: TrackedLinkProps) {
   return (
     <a
@@ -32,10 +36,12 @@ export function TrackedLink({
       rel={rel}
       onClick={() => {
         trackEvent(eventName, eventPayload);
+        if (secondaryEventName) {
+          trackEvent(secondaryEventName, secondaryEventPayload);
+        }
       }}
     >
       {children}
     </a>
   );
 }
-

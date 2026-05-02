@@ -1,3 +1,4 @@
+import { AnalyticsEvent } from "@/lib/analytics";
 import { TrackedLink } from "@/components/tracked-link";
 
 type ReportOfferErrorProps = {
@@ -38,7 +39,7 @@ export function ReportOfferError({ offerId, productId }: ReportOfferErrorProps) 
     <TrackedLink
       href={href}
       className="text-xs font-medium text-[#7A5C3E] underline"
-      eventName="offer_error_report_clicked"
+      eventName={AnalyticsEvent.ERROR_REPORTED}
       eventPayload={{
         offerId,
         productId,

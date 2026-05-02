@@ -5,6 +5,7 @@ import {
 } from "@/lib/formatters";
 import { getEffectiveUnitPriceInCents } from "@/lib/offers";
 import { ReportOfferError } from "@/components/report-offer-error";
+import { AnalyticsEvent } from "@/lib/analytics";
 import { TrackedLink } from "@/components/tracked-link";
 
 export type OfferCardProps = {
@@ -47,7 +48,6 @@ export function OfferCard({ offer, rank, productId }: OfferCardProps) {
   const matchPercent = Math.round(offer.matchConfidence * 100);
   const quantityPercent = Math.round(offer.quantityConfidence * 100);
 
-  const offerUrl = offer.affiliateUrl ?? offer.url;
   const destinationType = offer.affiliateUrl ? "affiliate" : "direct";
 
   return (
@@ -64,11 +64,11 @@ export function OfferCard({ offer, rank, productId }: OfferCardProps) {
 
         <div className="flex shrink-0 flex-col items-end gap-2">
           <TrackedLink
-            href={offerUrl}
+            href={`/go/${encodeURIComponent(offer.id)}`}
             className="rounded-xl bg-[#2F261F] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#4A382B]"
             target="_blank"
             rel="noreferrer"
-            eventName="offer_clicked"
+            eventName={AnalyticsEvent.OFFER_CLICKED}
             eventPayload={{
               offerId: offer.id,
               productId,
@@ -76,6 +76,17 @@ export function OfferCard({ offer, rank, productId }: OfferCardProps) {
               unitType: offer.unitType,
               effectiveUnitPriceInCents,
               destinationType,
+            }}
+            secondaryEventName={
+              offer.affiliateUrl
+                ? AnalyticsEvent.AFFILIATE_LINK_CLICKED
+                : AnalyticsEvent.NON_AFFILIATE_LINK_CLICKED
+            }
+            secondaryEventPayload={{
+              offerId: offer.id,
+              productId,
+              unitType: offer.unitType,
+              effectiveUnitPriceInCents,
             }}
           >
             Ver oferta
