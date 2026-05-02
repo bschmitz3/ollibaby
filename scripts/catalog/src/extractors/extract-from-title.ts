@@ -102,14 +102,14 @@ export function extractCandidateFromTitle(input: ExtractCandidateInput): {
           line: line.line,
           detectedType: type.type,
         })
-      : { inferred: "unknown", reason: null };
+      : { inferred: "unknown" as const, reason: null };
 
   const qty = extractQuantity(input.title);
   warnings.push(...qty.warnings);
 
   const unitType = inferUnitType(cat.category);
-  const usage = cat.category === "diaper" ? detectUsageType(input.title) : { usageType: "unknown", signals: [] };
-  const wipeType = cat.category === "wipe" ? detectWipeType(input.title) : { wipeType: "unknown", signals: [] };
+  const usage = cat.category === "diaper" ? detectUsageType(input.title) : { usageType: "unknown" as const, signals: [] };
+  const wipeType = cat.category === "wipe" ? detectWipeType(input.title) : { wipeType: "unknown" as const, signals: [] };
   const pkg = detectPackageType({ titleRaw: input.title, packCount: qty.packCount });
 
   const hasCategory = cat.category !== null;

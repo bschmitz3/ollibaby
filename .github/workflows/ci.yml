@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    name: Lint, Build & Validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Catalog typecheck
+        run: pnpm run catalog:typecheck
+
+      - name: Catalog tests
+        run: pnpm run catalog:test
+
+      - name: Validate approved catalog
+        run: pnpm run catalog:validate-approved
+
+      - name: Validate mock offers
+        run: pnpm run validate:mock-offers
+
+      - name: Validate mock price history
+        run: pnpm run validate:mock-price-history

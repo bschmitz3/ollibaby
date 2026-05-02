@@ -4,7 +4,7 @@ export const MIN_MATCH_CONFIDENCE = 0.85;
 export const MIN_QUANTITY_CONFIDENCE = 0.85;
 
 export function getEffectiveUnitPriceInCents(offer: Offer): number {
-  if (Number.isFinite(offer.unitPriceWithShippingInCents)) {
+  if (typeof offer.unitPriceWithShippingInCents === "number" && Number.isFinite(offer.unitPriceWithShippingInCents)) {
     return offer.unitPriceWithShippingInCents;
   }
 
@@ -50,4 +50,11 @@ export function getRankedOffersForProduct(
   return sortOffersByBestEffectiveUnitPrice(
     offers.filter((offer) => offer.canonicalProductId === canonicalProductId),
   );
+}
+
+export function getOfferById(
+  offers: Offer[],
+  offerId: string,
+): Offer | undefined {
+  return offers.find((offer) => offer.id === offerId);
 }
