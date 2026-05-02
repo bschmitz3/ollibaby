@@ -114,13 +114,28 @@ Steps em ordem:
 
 ---
 
+## Deploy (Vercel) e variáveis
+
+Na Vercel (**Production** e **Preview**, conforme política do time), configure pelo menos:
+
+| Variável | Observação |
+|----------|------------|
+| `NEXT_PUBLIC_SITE_URL` | URL canônica **sem** barra final (ex.: `https://<projeto>.vercel.app`). Obrigatória para `sitemap.xml`, `robots.txt` e metadados absolutos; sem ela, esses artefatos podem apontar para `http://localhost:3000`. |
+| `NEXT_PUBLIC_POSTHOG_KEY` | Pública no bundle; habilita captura client-side no PostHog quando definida. |
+| `NEXT_PUBLIC_POSTHOG_HOST` | Host da API PostHog (região do projeto). |
+| `POSTHOG_PROJECT_API_KEY` | **Somente servidor** — eventos no redirect `/go/`; não usar prefixo `NEXT_PUBLIC_`. |
+| `POSTHOG_HOST` | Host da API para `posthog-node`. |
+
+Lista completa e placeholders: `.env.example`. Checklist operacional e smoke test: `docs/production-deploy-checklist.md`.
+
+---
+
 ## Limitações atuais
 
 - Sem banco de dados ou persistência.
 - Sem scraping ou coleta de preços em produção.
 - Sem links afiliados reais (URLs de exemplo).
-- Sem analytics em produção (eventos só em `development`).
-- Sem SEO programático completo (metadata dinâmica por produto não implementada).
+- Analytics via PostHog quando as variáveis estão definidas no ambiente (local ou Vercel); conferir consentimento/LGPD antes de ampliar tráfego.
 - Sem autenticação ou cadastro de usuários.
 - Sem funcionalidades de estoque, alertas de preço ou rotina infantil.
 
@@ -130,6 +145,6 @@ Steps em ordem:
 
 1. **Marco 1 — Release técnico estável** *(em andamento)*: build estável, CI, documentação e checklist de release.
 2. **Marco 2 — Instrumentação**: analytics em produção, redirecionamento para afiliados rastreado, primeiros links afiliados reais.
-3. **Marco 3 — SEO inicial**: `generateMetadata` por produto, sitemap e dados estruturados.
+3. **Marco 3 — SEO inicial**: *parcialmente entregue* — metadata por produto, `sitemap.xml`, `robots.txt` e JSON-LD; evoluir conforme domínio, Search Console e conteúdo.
 4. **Marco 4 — Dados reais**: persistência mínima, pipeline de coleta e ofertas reais para ao menos um subconjunto do catálogo.
 5. **Marco 5 — Retenção** *(condicional)*: favoritos ou alertas de preço, se houver tração validada.

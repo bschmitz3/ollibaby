@@ -36,9 +36,10 @@
 
 ## Eventos client-side
 
-Todos disparados via `trackEvent` de `src/lib/analytics/track.ts`.  
-Em development: `console.info("[analytics]", event)`.  
-Em production: no-op até integração com ferramenta externa.
+Todos disparados via `trackEvent` de `src/lib/analytics/track.ts`.
+
+- Em **development** (`NODE_ENV=development`): além do envio opcional ao PostHog, há `console.info("[analytics]", …)` para depuração.
+- Em **production**: não há esse log; se **`NEXT_PUBLIC_POSTHOG_KEY`** estiver definida, os eventos são enviados ao PostHog via `posthog.capture`. Sem essa variável, não há captura no cliente.
 
 ---
 
@@ -372,8 +373,10 @@ Feita em `instrumentation-client.ts` (raiz do projeto), que executa antes da hid
 Todos os eventos passam por `trackEvent` em `src/lib/analytics/track.ts`. O PostHog não recebe eventos diretamente dos componentes.
 
 ```
-componente → trackEvent() → console.info (dev) + posthog.capture() (se chave configurada)
+componente → trackEvent() → console.info (somente dev) + posthog.capture() (se NEXT_PUBLIC_POSTHOG_KEY definida)
 ```
+
+`NEXT_PUBLIC_SITE_URL` **não** participa do envio de analytics; ela define a base de URLs absolutas para SEO (sitemap, robots, metadados). Ver `.env.example` e `docs/production-deploy-checklist.md`.
 
 ### Variáveis de ambiente necessárias
 

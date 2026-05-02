@@ -66,6 +66,36 @@ Substitua `{BASE}` pela URL de produção ou preview em uso.
 
 - [ ] Nenhuma regressão visual relevante (layout, tipografia, espaçamentos principais) em home e página de produto.
 
+### Smoke test rápido via terminal (`curl`)
+
+Substitua `BASE` pela URL do deploy (**sem** barra final), por exemplo `https://<projeto>.vercel.app`.
+
+```bash
+BASE="https://<projeto>.vercel.app"
+
+# HTTP status (esperado 200 nas páginas abaixo)
+curl -sS -o /dev/null -w "%{http_code}  GET /\n" "$BASE/"
+curl -sS -o /dev/null -w "%{http_code}  GET /?q=pampers\n" "$BASE/?q=pampers"
+curl -sS -o /dev/null -w "%{http_code}  GET filtros\n" "$BASE/?category=diaper&size=RN"
+# Substitua pelos IDs reais do catálogo: um produto com oferta ranqueável e outro sem.
+curl -sS -o /dev/null -w "%{http_code}  GET produto com oferta\n" "$BASE/produtos/{ID_COM_OFERTA}"
+curl -sS -o /dev/null -w "%{http_code}  GET produto sem oferta\n" "$BASE/produtos/{ID_SEM_OFERTA}"
+
+# /go/: válido → 302; id inválido → 404
+curl -sS -I -o /dev/null -w "%{http_code}  HEAD /go válido\n" "$BASE/go/{OFFER_ID_VALIDO}"
+curl -sS -I -o /dev/null -w "%{http_code}  HEAD /go inválido\n" "$BASE/go/id-invalido"
+
+# robots.txt (conferir linha Sitemap e Disallow: /go/)
+curl -sS "$BASE/robots.txt"
+
+# Sitemap: sem localhost, sem /go/, com URLs absolutas do próprio BASE
+curl -sS "$BASE/sitemap.xml" | grep -c localhost || true          # esperado: 0
+curl -sS "$BASE/sitemap.xml" | grep -c '/go/' || true             # esperado: 0
+curl -sS "$BASE/sitemap.xml" | grep -cF "$BASE" || true           # esperado: ≥ 1
+```
+
+Se `NEXT_PUBLIC_SITE_URL` não estiver definida no deploy, o sitemap e o `robots.txt` podem referenciar `http://localhost:3000` — corrigir na Vercel e **redeploy**.
+
 ---
 
 ## Validação PostHog

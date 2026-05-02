@@ -18,6 +18,9 @@
 ## Variáveis esperadas em `.env.local`
 
 ```
+# URL canônica (local: http://localhost:3000). Na Vercel, use a URL do deploy sem barra final.
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
 # Client-side
 NEXT_PUBLIC_POSTHOG_KEY=phc_...
 NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
@@ -28,6 +31,8 @@ POSTHOG_HOST=https://us.i.posthog.com
 ```
 
 > As chaves client-side e server-side podem ser a mesma Project API Key do projeto.
+
+Em um ambiente implantado (produção ou preview), se **`NEXT_PUBLIC_POSTHOG_KEY`** estiver definida na Vercel, os eventos client-side também são enviados ao PostHog — a mesma lógica de `trackEvent` que no desenvolvimento local com `.env.local`.
 
 ---
 
