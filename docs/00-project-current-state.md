@@ -183,6 +183,7 @@ Documentação (`docs/00-decisoes-mvp.md`, seção de pesos) descreve uma polít
 ### 8.2 Página de produto (`src/app/produtos/[id]/page.tsx`)
 
 - Resolução de produto por ID; **`notFound()`** se inválido (sem `not-found.tsx` customizado — cai no default do Next.js).
+- **`generateMetadata`** por produto + JSON-LD `Product` (ver §8.5).
 - `ProductViewTracker`: dispara evento de visualização no cliente.
 - Botão **Reportar erro** (mailto para `contato@ollibaby.com` com template).
 - `PriceHistorySummary`: sinal vs média mockada.
@@ -198,7 +199,12 @@ Documentação (`docs/00-decisoes-mvp.md`, seção de pesos) descreve uma polít
 - Metadata estática global em português (title/description únicos).
 - Fontes Geist; `lang="pt-BR"`.
 
-**Gap de SEO:** não há **`generateMetadata`** nem **`generateStaticParams`** nas rotas de produto — todas as páginas `/produtos/[id]` compartilham o mesmo título/descrição do layout, o que contradiz o objetivo de “SEO programático” citado na documentação de MVP.
+### 8.5 SEO programático inicial (implementado)
+
+- **`generateMetadata`** em `src/app/produtos/[id]/page.tsx`: título e descrição em pt-BR por produto canônico; descrição só menciona preço unitário da melhor oferta quando há oferta **ranqueável** (mesma lógica da página); sem campos inventados.
+- **`src/app/sitemap.ts`**: home `/` e uma entrada por produto em `/produtos/[id]`, URLs absolutas via `NEXT_PUBLIC_SITE_URL` (fallback `http://localhost:3000`). Sem `/go/[offerId]`.
+- **`src/app/robots.ts`**: permite indexação geral; **`Disallow: /go/`** (redirect outbound / tracking, não deve ser indexado); `Sitemap` aponta para `${NEXT_PUBLIC_SITE_URL ?? fallback}/sitemap.xml`.
+- **JSON-LD** (`schema.org/Product`) na página de produto: nome, marca (quando há texto), categoria, URL da própria página; bloco `offers` apenas com melhor oferta ranqueável (preço unitário efetivo em BRL, disponibilidade quando mapeável). Sem URL afiliada externa, ratings inventados ou GTIN forçado no LD+JSON.
 
 ---
 

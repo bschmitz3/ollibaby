@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -11,6 +12,12 @@ import { ProductWithoutOfferTracker } from "@/components/product-without-offer-t
 import { mockOffers } from "@/data/mock-offers";
 import { getCanonicalProducts } from "@/lib/catalog/search";
 import { getEffectiveUnitPriceInCents, getRankedOffersForProduct } from "@/lib/offers";
+import { buildProductJsonLd } from "@/lib/seo/product-json-ld";
+import {
+  buildProductMetaDescription,
+  buildProductMetaTitle,
+} from "@/lib/seo/product-metadata";
+import { getSiteUrl } from "@/lib/seo/site-url";
 
 type ProductPageProps = {
   params: Promise<{
@@ -46,6 +53,39 @@ function buildReportErrorHref(params: {
   )}&body=${encodeURIComponent(body)}`;
 }
 
+export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const products = getCanonicalProducts();
+  const product = products.find((p) => p.id === resolvedParams.id);
+
+  if (!product) {
+    notFound();
+  }
+
+  const rankedOffers = getRankedOffersForProduct(mockOffers, product.id);
+  const bestOffer = rankedOffers[0];
+  const bestUnitPriceInCents = bestOffer
+    ? getEffectiveUnitPriceInCents(bestOffer)
+    : undefined;
+
+  const title = buildProductMetaTitle(product);
+  const description = buildProductMetaDescription(product, bestUnitPriceInCents);
+  const siteUrl = getSiteUrl();
+  const pageUrl = `${siteUrl}/produtos/${encodeURIComponent(product.id)}`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      locale: "pt_BR",
+      type: "website",
+      url: pageUrl,
+    },
+  };
+}
+
 export default async function ProductPage({ params }: ProductPageProps) {
   const resolvedParams = await params;
   const products = getCanonicalProducts();
@@ -71,8 +111,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
     rankedOffersCount: rankedOffers.length,
   });
 
+  const productJsonLd = buildProductJsonLd(product, getSiteUrl(), bestOffer);
+  const productJsonLdInline = JSON.stringify(productJsonLd).replace(/</g, "\\u003c");
+
   return (
     <main className="min-h-screen bg-[#FFF8F1] text-[#2F261F]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: productJsonLdInline }}
+      />
       <section className="mx-auto w-full max-w-5xl px-6 py-12">
         <Link href="/" className="text-sm font-medium text-[#7A5C3E] underline">
           Voltar
